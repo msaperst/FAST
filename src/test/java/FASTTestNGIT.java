@@ -1,16 +1,18 @@
+import com.testpros.fast.By;
+import com.testpros.fast.WebDriver;
+import com.testpros.fast.WebElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import com.testpros.fast.*;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 
@@ -25,14 +27,14 @@ public class FASTTestNGIT {
     @BeforeMethod
     public void setup(Method method) {
         // if an appium test case, setup our appium server
-        if( method.getName().startsWith("appium" )) {
+        if (method.getName().startsWith("appium")) {
             service = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().usingAnyFreePort());
             service.start();
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
             capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Android Emulator");
             capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 60);
-            if( method.getName().startsWith("appiumBrowser")) {
+            if (method.getName().startsWith("appiumBrowser")) {
                 capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "Chrome");
                 WebDriverManager.chromedriver().forceCache().version("74").setup();
                 capabilities.setCapability(AndroidMobileCapabilityType.CHROMEDRIVER_EXECUTABLE,
@@ -90,7 +92,7 @@ public class FASTTestNGIT {
     @AfterMethod(alwaysRun = true)
     public void cleanup(Method method) {
         driver.quit();
-        if( service != null ) {
+        if (service != null) {
             service.stop();
         }
         driver.getReporter().simpleOut(method.getName());
