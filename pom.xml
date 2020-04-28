@@ -32,6 +32,7 @@
         <testng.version>6.14.3</testng.version>
         <webdrivermanager.version>3.7.1</webdrivermanager.version>
         <commons.io.version>2.6</commons.io.version>
+        <http.client.commponent.version>4.5.12</http.client.commponent.version>
     </properties>
 
     <dependencies>
@@ -70,6 +71,11 @@
             <artifactId>commons-io</artifactId>
             <version>${commons.io.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${http.client.commponent.version}</version>
         </dependency>
     </dependencies>
 

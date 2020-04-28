@@ -18,7 +18,12 @@ public class WebDriver implements org.openqa.selenium.WebDriver {
     org.openqa.selenium.WebDriver driver;
     Reporter reporter;
 
+    //wait times
+    long waitTime = 5;
+    long pollTime = 50;
+
     public WebDriver(org.openqa.selenium.WebDriver driver) {
+        // TODO - consider logging this
         this.driver = driver;
         reporter = new Reporter(driver);
     }
@@ -70,6 +75,41 @@ public class WebDriver implements org.openqa.selenium.WebDriver {
     }
 
     /**
+     * Checks to see if the desired element is present or not
+     *
+     * @param by
+     * @return
+     */
+    public boolean isElementPresent(By by) {
+        try {
+            driver.findElement(by);
+            return true;
+        } catch (NoSuchElementException | StaleElementReferenceException e) {
+            // not doing any logging, as this is just a check, nothing to log
+        }
+        return false;
+    }
+
+    public void waitForElementPresent(By by) {
+        if (!isElementPresent(by)) {
+            // if it's not present, wait, and log that wait
+            Step step = new Step("Waiting for element '" + by + "' to be present",
+                    "Element '" + by + "' is present");
+            try {
+                WebDriverWait wait = new WebDriverWait(driver, waitTime, pollTime);
+                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
+                step.setStatus(Status.PASS);
+                step.setActual("Waited '" + step.getTime() + "' milliseconds for element '" + by + "' to be present");
+            } catch (TimeoutException e) {
+                step.setStatus(Status.FAIL);
+                step.setActual("After waiting '" + waitTime + "' seconds, element '" + by + "' is not present");
+            } finally {
+                reporter.addStep(step);
+            }
+        }
+    }
+
+    /**
      * @param by The Selenium locating mechanism
      * @return A list of all {@link org.openqa.selenium.WebElement}url,
      * or an empty list if nothing matches
@@ -96,13 +136,13 @@ public class WebDriver implements org.openqa.selenium.WebDriver {
 
     public List<WebElement> findElements(By by) {
         // first wait, and ensure at least one match is available, but we'll throw it away
-        new WebElement(driver, by, reporter);
+        waitForElementPresent(by);
         // not doing any logging, as this is just a check, nothing to log
         List<WebElement> webElements = new ArrayList<>();
         List<org.openqa.selenium.WebElement> elements = driver.findElements(by);
         int counter = 1;
         for (org.openqa.selenium.WebElement element : elements) {
-            webElements.add(new WebElement(driver, element, counter, reporter));
+            webElements.add(new WebElement(this, element, counter));
             counter++;
         }
         return webElements;
@@ -110,7 +150,7 @@ public class WebDriver implements org.openqa.selenium.WebDriver {
 
     public WebElement findElement(By by) {
         // not doing any logging, as this is just a check, nothing to log
-        return new WebElement(driver, by, reporter);
+        return new WebElement(this, by);
     }
 
     public String getPageSource() {
