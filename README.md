@@ -4,6 +4,15 @@ Start writing your Appium and Selenium tests **fast**
 Convert **fast** from strait Appium and Selenium tests to FAST
 
 Execute your tests **fast**
+
+## Why Use FAST
+* Don't learn a new DSL - re-use the same Selenium interface you are used to
+* Using the same Selenium commands, get reporting 'for free'
+    - Provides traceability
+    - Assists with debugging and triage
+    - Build custom reports to match your process and/or system
+* Waits - TODO - explain me
+* APIs - TODO - explain me
  
 ## Getting Started
 Getting started with FAST should be simple, and well, fast. 
@@ -177,6 +186,6 @@ test case name could be recorded in the reporter.
 
 # TODO
 - waits
-  - custom
+  - custom - still need negatives
   - built ins (now autowaits for element present, still needs to wait for custom actions (e.g. editable for sendKeys))
 - APIs

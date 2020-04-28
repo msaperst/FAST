@@ -5,7 +5,7 @@ import com.testpros.fast.reporter.Step;
 import com.testpros.fast.reporter.Step.Status;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.imageio.ImageIO;
@@ -18,49 +18,30 @@ import java.util.List;
 
 public class WebElement implements org.openqa.selenium.WebElement {
 
-    org.openqa.selenium.WebDriver driver;
+    WebDriver driver;
     org.openqa.selenium.WebElement element;
     String elementName;
     Reporter reporter;
     String screenshot;
 
-    //wait times
-    long waitTime = 30;
-    long pollTime = 50;
-
-    protected WebElement(org.openqa.selenium.WebDriver driver, org.openqa.selenium.WebElement element, int match, Reporter reporter) {
+    protected WebElement(WebDriver driver, org.openqa.selenium.WebElement element, int match) {
         this.driver = driver;
         this.elementName = element.toString().split("->")[1].replaceFirst("(?s)(.*)\\]", "$1" + "") + " [" + match + "]";
-        this.reporter = reporter;
+        this.reporter = driver.getReporter();
     }
 
-    protected WebElement(org.openqa.selenium.WebDriver driver, By by, Reporter reporter) {
+    protected WebElement(WebDriver driver, By by) {
         this.driver = driver;
         this.elementName = by.toString();   //TODO - clean this up some
-        this.reporter = reporter;
+        this.reporter = driver.getReporter();
         // before we do anything, ensure the element present, and wait for it if needed
-        if (!isPresent(by)) {
-            // if it's not present, wait, and log that wait
-            Step step = new Step("Waiting for element '" + by + "' to be present",
-                    "Element '" + by + "' is present");
-            try {
-                WebDriverWait wait = new WebDriverWait(driver, waitTime, pollTime);
-                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
-                step.setStatus(Status.PASS);
-                step.setActual("Waited '" + step.getTime() + "' milliseconds for element '" + by + "' to be present");
-            } catch (TimeoutException e) {
-                step.setStatus(Status.FAIL);
-                step.setActual("After waiting '" + waitTime + "' seconds, element '" + by + "' is not present");
-            } finally {
-                reporter.addStep(step);
-            }
-        }
-        this.element = driver.findElement(by);
+        driver.waitForElementPresent(by);
+        this.element = driver.driver.findElement(by);
         // scroll to the element
         // TODO
         // capture the element
         try {
-            File fullPageScreenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            File fullPageScreenshot = ((TakesScreenshot) driver.driver).getScreenshotAs(OutputType.FILE);
             BufferedImage fullImg = ImageIO.read(fullPageScreenshot);
             Rectangle rectangle = this.element.getRect();
             if (new Rectangle(0, 0, 0, 0).equals(rectangle)) {
@@ -73,17 +54,6 @@ public class WebElement implements org.openqa.selenium.WebElement {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private boolean isPresent(org.openqa.selenium.By by) {
-        boolean isPresent = false;
-        try {
-            driver.findElement(by);
-            isPresent = true;
-        } catch (NoSuchElementException | StaleElementReferenceException e) {
-            // do nothing
-        }
-        return isPresent;
     }
 
     public void click() {
@@ -170,9 +140,47 @@ public class WebElement implements org.openqa.selenium.WebElement {
         return this.element.isSelected();
     }
 
+    public void waitForSelected() {
+        if (!isSelected()) {
+            // if it's not displayed, wait, and log that wait
+            Step step = new Step("Waiting for element '" + elementName + "' to be selected",
+                    "Element '" + elementName + "' is selected");
+            try {
+                WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
+                wait.until((ExpectedCondition<Boolean>) d -> isSelected());
+                step.setStatus(Status.PASS);
+                step.setActual("Waited '" + step.getTime() + "' milliseconds for element '" + elementName + "' to be selected");
+            } catch (TimeoutException e) {
+                step.setStatus(Status.FAIL);
+                step.setActual("After waiting '" + driver.waitTime + "' seconds, element '" + elementName + "' is not selected");
+            } finally {
+                reporter.addStep(step);
+            }
+        }
+    }
+
     public boolean isEnabled() {
         // not doing any logging, as this is just a check, nothing to log
         return this.element.isEnabled();
+    }
+
+    public void waitForEnabled() {
+        if (!isEnabled()) {
+            // if it's not displayed, wait, and log that wait
+            Step step = new Step("Waiting for element '" + elementName + "' to be enabled",
+                    "Element '" + elementName + "' is enabled");
+            try {
+                WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
+                wait.until((ExpectedCondition<Boolean>) d -> isEnabled());
+                step.setStatus(Status.PASS);
+                step.setActual("Waited '" + step.getTime() + "' milliseconds for element '" + elementName + "' to be enabled");
+            } catch (TimeoutException e) {
+                step.setStatus(Status.FAIL);
+                step.setActual("After waiting '" + driver.waitTime + "' seconds, element '" + elementName + "' is not enabled");
+            } finally {
+                reporter.addStep(step);
+            }
+        }
     }
 
     public String getText() {
@@ -206,13 +214,13 @@ public class WebElement implements org.openqa.selenium.WebElement {
 
     public List<WebElement> findElements(By by) {
         // first wait, and ensure at least one match is available, but we'll throw it away
-        new WebElement(driver, by, reporter);
+        this.driver.waitForElementPresent(by);
         // not doing any logging, as this is just a check, nothing to log
         List<WebElement> webElements = new ArrayList<>();
         List<org.openqa.selenium.WebElement> elements = this.element.findElements(by);
         int counter = 1;
         for (org.openqa.selenium.WebElement element : elements) {
-            webElements.add(new WebElement(driver, element, counter, reporter));
+            webElements.add(new WebElement(driver, element, counter));
             counter++;
         }
         return webElements;
@@ -220,12 +228,31 @@ public class WebElement implements org.openqa.selenium.WebElement {
 
     public WebElement findElement(By by) {
         // not doing any logging, as this is just a check, nothing to log
-        return new WebElement(driver, by, reporter);
+        return new WebElement(driver, by);
     }
 
     public boolean isDisplayed() {
         // not doing any logging, as this is just a check, nothing to log
         return this.element.isDisplayed();
+    }
+
+    public void waitForDisplayed() {
+        if (!isDisplayed()) {
+            // if it's not displayed, wait, and log that wait
+            Step step = new Step("Waiting for element '" + elementName + "' to be displayed",
+                    "Element '" + elementName + "' is displayed");
+            try {
+                WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
+                wait.until((ExpectedCondition<Boolean>) d -> isDisplayed());
+                step.setStatus(Status.PASS);
+                step.setActual("Waited '" + step.getTime() + "' milliseconds for element '" + elementName + "' to be displayed");
+            } catch (TimeoutException e) {
+                step.setStatus(Status.FAIL);
+                step.setActual("After waiting '" + driver.waitTime + "' seconds, element '" + elementName + "' is not displayed");
+            } finally {
+                reporter.addStep(step);
+            }
+        }
     }
 
     public Point getLocation() {

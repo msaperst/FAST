@@ -24,7 +24,12 @@ import static org.testng.Assert.assertTrue;
 public class WebDriverTestNGIT {
 
     WebDriver driver;
+    WebDriverWait wait;
     AppiumDriverLocalService service;
+
+    By username = By.id("usernameOrEmail");
+    By password = By.id("password");
+    By meLink = By.cssSelector("a[data-tip-target='me']");
 
     @BeforeMethod
     public void setup(Method method) {
@@ -52,38 +57,53 @@ public class WebDriverTestNGIT {
             WebDriverManager.chromedriver().forceCache().setup();
             driver = new ChromeDriver();
         }
+        wait = new WebDriverWait(driver, 5);
     }
 
     @Test
     public void seleniumSampleTest() {
-        driver.get("https://google.com");
-        WebElement element = driver.findElement(By.name("q"));
-        element.sendKeys("cheese");
-        element.submit();
-        element = driver.findElement(By.name("q"));
-        assertEquals(element.getAttribute("value"), "cheese");
+        By continueButton = By.cssSelector("button[type='submit']");
+        By usernameDisplay = By.className("profile-gravatar__user-display-name");
+
+        driver.get("https://wordpress.com/");
+        driver.findElement(By.linkText("Log In")).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(username));
+        driver.findElement(username).sendKeys(Property.getProperty("username"));
+        driver.findElement(continueButton).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(password));
+        driver.findElement(password).sendKeys(Property.getProperty("password"));
+        driver.findElement(continueButton).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(meLink));
+        driver.findElement(meLink).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameDisplay));
+        assertEquals(driver.findElement(usernameDisplay).getText(), Property.getProperty("username"));
     }
 
 
     @Test
     public void appiumBrowserSampleTest() {
-        driver.get("https://google.com");
-        WebElement element = driver.findElement(By.name("q"));
-        element.sendKeys("cheese");
-        element.sendKeys(Keys.ENTER);
-        element = driver.findElement(By.name("q"));
-        assertEquals(element.getAttribute("value"), "cheese");
-    }
+        By signInLink = By.cssSelector("a.x-menu-link[title='Log In']");
 
-    By userId = By.id("mobileNo");
-    By password = By.id("et_password");
-    By loginButton = By.id("btn_mlogin");
-    By existingUserLogin = By.id("btn_mlogin");
-    By errorMessage = By.id("pageLevelError");
+        driver.get("https://wordpress.com/");
+        driver.findElement(By.cssSelector("span.x-icon--menu")).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(signInLink));
+        driver.findElement(signInLink).click();
+        driver.findElement(username).sendKeys(Property.getProperty("username"), Keys.ENTER);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(password));
+        driver.findElement(password).sendKeys(Property.getProperty("password"), Keys.ENTER);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(meLink));
+        driver.findElement(meLink).click();
+        assertEquals(driver.findElement(By.id("display_name")).getAttribute("value"), Property.getProperty("username"));
+    }
 
     @Test
     public void appiumNativeSampleTest() {
-        WebDriverWait wait = new WebDriverWait(driver, 30);
+        By userId = By.id("mobileNo");
+        By password = By.id("et_password");
+        By loginButton = By.id("btn_mlogin");
+        By existingUserLogin = By.id("btn_mlogin");
+        By errorMessage = By.id("pageLevelError");
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(existingUserLogin));
         driver.findElement(existingUserLogin).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(loginButton));
