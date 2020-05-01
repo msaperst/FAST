@@ -1,5 +1,6 @@
 package com.testpros.fast.reporter;
 
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -10,10 +11,12 @@ public class Step {
 
     private final String action;
     private final String expected;
+    private final long startTime;
     private int number;
     private String actual;
     private String screenshot;
-    private final long startTime;
+    private RestRequest request;
+    private CloseableHttpResponse response;
     private double time;
     private Status status;
 
@@ -21,6 +24,25 @@ public class Step {
         this.action = action;
         this.expected = expected;
         startTime = new Date().getTime();
+    }
+
+    public Step(String action, String expected, RestRequest request) {
+        this.action = action;
+        this.expected = expected;
+        this.request = request;
+        startTime = new Date().getTime();
+    }
+
+    public RestRequest getRequest() {
+        return request;
+    }
+
+    public CloseableHttpResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(CloseableHttpResponse response) {
+        this.response = response;
     }
 
     public int getNumber() {
