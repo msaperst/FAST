@@ -188,4 +188,4 @@ test case name could be recorded in the reporter.
 - waits
   - custom - still need negatives
   - built ins (now autowaits for element present, still needs to wait for custom actions (e.g. editable for sendKeys))
-- APIs
+- JavaDocs

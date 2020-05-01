@@ -9,7 +9,6 @@ import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.http.NameValuePair;
-import org.apache.http.auth.AuthenticationException;
 import org.apache.http.message.BasicNameValuePair;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -61,7 +60,7 @@ public class FASTTestNGIT {
     }
 
     @Test
-    public void seleniumSampleTest() throws IOException, AuthenticationException {
+    public void seleniumSampleTest() throws IOException {
         driver.get("https://wordpress.com/");
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("username", Property.getProperty("username")));
@@ -75,7 +74,7 @@ public class FASTTestNGIT {
     }
 
     @Test
-    public void appiumBrowserSampleTest() throws IOException, AuthenticationException {
+    public void appiumBrowserSampleTest() throws IOException {
         driver.get("https://wordpress.com/");
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("username", Property.getProperty("username")));
