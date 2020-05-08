@@ -17,6 +17,58 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven.failsafe.plugin.version}</version>
+                <configuration>
+                    <parallel>methods</parallel>
+                    <threadCount>${failsafe.threads}</threadCount>
+                    <properties>
+                        <property>
+                            <name>surefire.testng.verbose</name>
+                            <value>${failsafe.verbosity}</value>
+                        </property>
+                        <!--                        <property>-->
+                        <!--                            <name>listener</name>-->
+                        <!--                            <value>com.coveros.selenified.utilities.Transformer</value>-->
+                        <!--                        </property>-->
+                    </properties>
+                    <groups>${failsafe.groups.include}</groups>
+                    <excludedGroups>${failsafe.groups.exclude}</excludedGroups>
+                    <includes>
+                        <include>${failsafe.files.include}</include>
+                    </includes>
+                    <excludes>
+                        <exclude>${failsafe.files.exclude}</exclude>
+                    </excludes>
+                    <systemPropertyVariables>
+                        <selenium.version>${selenium.version}</selenium.version>
+                    </systemPropertyVariables>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Skips integration tests if the value of skip.integration.tests property is true -->
+                            <skipTests>${skip.integration.tests}</skipTests>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Skips integration tests if the value of skip.integration.tests property is true -->
+                            <skipTests>${skip.integration.tests}</skipTests>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -33,6 +85,16 @@
         <webdrivermanager.version>3.7.1</webdrivermanager.version>
         <commons.io.version>2.6</commons.io.version>
         <http.client.commponent.version>4.5.12</http.client.commponent.version>
+
+        <!-- Functional test run information -->
+        <maven.failsafe.plugin.version>2.22.2</maven.failsafe.plugin.version>
+        <failsafe.threads>5</failsafe.threads>
+        <failsafe.verbosity>0</failsafe.verbosity>
+        <failsafe.groups.include/>
+        <failsafe.groups.exclude/>
+        <failsafe.files.include>**/FastExampleIT.java</failsafe.files.include>
+        <failsafe.files.exclude/>
+        <skip.integration.tests>false</skip.integration.tests>
     </properties>
 
     <dependencies>
@@ -78,6 +140,4 @@
             <version>${http.client.commponent.version}</version>
         </dependency>
     </dependencies>
-
-
 </project>

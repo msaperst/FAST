@@ -1,4 +1,5 @@
 # F.A.S.T. - Framework for Appium and Selenium Testing
+## FAST Java Library
 Start writing your Appium and Selenium tests **fast**
 
 Convert **fast** from strait Appium and Selenium tests to FAST
@@ -114,7 +115,7 @@ import org.testng.annotations.*;
 
 import static org.testng.Assert.assertEquals;
 
-public class WebDriverTestNGIT {
+public class WebDriverIT {
 
     WebDriver driver;
 
@@ -151,7 +152,7 @@ import java.lang.reflect.Method;
 
 import static org.testng.Assert.assertEquals;
 
-public class FASTTestNGIT {
+public class FastIT {
 
     WebDriver driver;
 
@@ -189,3 +190,6 @@ test case name could be recorded in the reporter.
   - custom - still need negatives
   - built ins (now autowaits for element present, still needs to wait for custom actions (e.g. editable for sendKeys))
 - JavaDocs
+- More tracability
+  - All-Screen screenshot
+  - recording... 

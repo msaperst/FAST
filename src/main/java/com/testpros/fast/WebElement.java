@@ -18,32 +18,32 @@ import java.util.List;
 
 public class WebElement implements org.openqa.selenium.WebElement {
 
-    WebDriver driver;
+    RemoteWebDriver driver;
     org.openqa.selenium.WebElement element;
     String elementName;
     Reporter reporter;
     String screenshot;
 
     // TODO - JavaDoc
-    protected WebElement(WebDriver driver, org.openqa.selenium.WebElement element, int match) {
+    protected WebElement(RemoteWebDriver driver, org.openqa.selenium.WebElement element, int match) {
         this.driver = driver;
         this.elementName = element.toString().split("->")[1].replaceFirst("(?s)(.*)\\]", "$1" + "") + " [" + match + "]";
         this.reporter = driver.getReporter();
     }
 
     // TODO - JavaDoc
-    protected WebElement(WebDriver driver, By by) {
+    protected WebElement(RemoteWebDriver driver, By by) {
         this.driver = driver;
         this.elementName = by.toString();   //TODO - clean this up some
         this.reporter = driver.getReporter();
         // before we do anything, ensure the element present, and wait for it if needed
         driver.waitForElementPresent(by);
-        this.element = driver.driver.findElement(by);
+        this.element = driver.getDriver().findElement(by);
         // scroll to the element
         // TODO
         // capture the element
         try {
-            File fullPageScreenshot = ((TakesScreenshot) driver.driver).getScreenshotAs(OutputType.FILE);
+            File fullPageScreenshot = ((TakesScreenshot) driver.getDriver()).getScreenshotAs(OutputType.FILE);
             BufferedImage fullImg = ImageIO.read(fullPageScreenshot);
             Rectangle rectangle = this.element.getRect();
             if (new Rectangle(0, 0, 0, 0).equals(rectangle)) {
