@@ -20,13 +20,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.FindsByClassName;
-import org.openqa.selenium.internal.FindsByCssSelector;
-import org.openqa.selenium.internal.FindsById;
-import org.openqa.selenium.internal.FindsByLinkText;
-import org.openqa.selenium.internal.FindsByName;
-import org.openqa.selenium.internal.FindsByTagName;
-import org.openqa.selenium.internal.FindsByXPath;
+import org.openqa.selenium.internal.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -39,10 +33,10 @@ import java.util.List;
  *
  * <code>
  * public WebElement findElement(WebDriver driver) {
- *     WebElement element = driver.findElement(By.id(getSelector()));
- *     if (element == null)
- *       element = driver.findElement(By.name(getSelector());
- *     return element;
+ * WebElement element = driver.findElement(By.id(getSelector()));
+ * if (element == null)
+ * element = driver.findElement(By.name(getSelector());
+ * return element;
  * }
  * </code>
  */
@@ -401,7 +395,7 @@ public abstract class By extends org.openqa.selenium.By {
          * containingWord("class", "foo") + "]".
          *
          * @param attribute name
-         * @param word name
+         * @param word      name
          * @return XPath fragment
          */
         private String containingWord(String attribute, String word) {

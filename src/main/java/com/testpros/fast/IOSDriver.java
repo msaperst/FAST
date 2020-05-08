@@ -1,6 +1,5 @@
 package com.testpros.fast;
 
-import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
@@ -13,45 +12,49 @@ import java.net.URL;
 
 public class IOSDriver<T extends WebElement> extends RemoteWebDriver {
 
-    io.appium.java_client.ios.IOSDriver iOSDriver;
-    Reporter reporter = new Reporter(null);
-
     public IOSDriver(HttpCommandExecutor executor, Capabilities capabilities) {
-        Step step = new Step("Launching new IOS instance",
-                "New IOSDriver successfully starts");
+        Step step = setupStep();
         try {
-            iOSDriver = new io.appium.java_client.ios.IOSDriver<>(executor, capabilities);
-            reporter = new Reporter(iOSDriver);
-            step.setActual("IOSDriver successfully started");
-            step.setStatus(Step.Status.PASS);
+            remoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(executor, capabilities);
+            passStep(step);
         } catch (Exception e) {
-            step.setActual("Unable to launch new iOS instance: " + e);
-            step.setStatus(Step.Status.FAIL);
+            failStep(step, e);
         } finally {
             reporter.addStep(step);
         }
     }
 
     public IOSDriver(URL remoteAddress, Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(remoteAddress, desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
-    public IOSDriver(URL remoteAddress, HttpClient.Factory httpClientFactory,
-                     Capabilities desiredCapabilities) {
-        //TODO
+    public IOSDriver(URL remoteAddress, HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(remoteAddress, httpClientFactory, desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public IOSDriver(AppiumDriverLocalService service, Capabilities desiredCapabilities) {
-        Step step = new Step("Launching new IOS instance",
-                "New IOSDriver successfully starts");
+        Step step = setupStep();
         try {
-            iOSDriver = new io.appium.java_client.ios.IOSDriver<>(service, desiredCapabilities);
-            reporter = new Reporter(iOSDriver);
-            step.setActual("IOSDriver successfully started");
-            step.setStatus(Step.Status.PASS);
+            remoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(service, desiredCapabilities);
+            passStep(step);
         } catch (Exception e) {
-            step.setActual("Unable to launch new iOS instance: " + e);
-            step.setStatus(Step.Status.FAIL);
+            failStep(step, e);
         } finally {
             reporter.addStep(step);
         }
@@ -59,33 +62,72 @@ public class IOSDriver<T extends WebElement> extends RemoteWebDriver {
 
     public IOSDriver(AppiumDriverLocalService service, HttpClient.Factory httpClientFactory,
                      Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(service, httpClientFactory, desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public IOSDriver(AppiumServiceBuilder builder, Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(builder, desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
-    public IOSDriver(AppiumServiceBuilder builder, HttpClient.Factory httpClientFactory,
-                     Capabilities desiredCapabilities) {
-        //TODO
+    public IOSDriver(AppiumServiceBuilder builder, HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(builder, httpClientFactory, desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public IOSDriver(HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(httpClientFactory, desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public IOSDriver(Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     @Override
-    public org.openqa.selenium.remote.RemoteWebDriver getDriver() {
-        return iOSDriver;
+    String getDeviceName() {
+        return "iOS";
     }
 
     @Override
-    public Reporter getReporter() {
-        return reporter;
+    String getDriverName() {
+        return "IOSDriver";
     }
 }

@@ -1,6 +1,5 @@
 package com.testpros.fast;
 
-import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.opera.OperaDriverService;
@@ -8,54 +7,82 @@ import org.openqa.selenium.opera.OperaOptions;
 
 public class OperaDriver extends RemoteWebDriver {
 
-    org.openqa.selenium.opera.OperaDriver operaDriver;
-    Reporter reporter = new Reporter(null);
-
     public OperaDriver() {
-        Step step = new Step("Launching new Opera instance",
-                "New OperaDriver successfully starts");
+        Step step = setupStep();
         try {
-            operaDriver = new org.openqa.selenium.opera.OperaDriver();
-            reporter = new Reporter(operaDriver);
-            step.setActual("OperaDriver successfully started");
-            step.setStatus(Step.Status.PASS);
+            remoteWebDriver = new org.openqa.selenium.opera.OperaDriver();
+            passStep(step);
         } catch (Exception e) {
-            step.setActual("Unable to launch new opera instance: " + e);
-            step.setStatus(Step.Status.FAIL);
+            failStep(step, e);
         } finally {
             reporter.addStep(step);
         }
     }
 
     public OperaDriver(OperaDriverService service) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.opera.OperaDriver(service);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     @Deprecated
     public OperaDriver(Capabilities capabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.opera.OperaDriver(capabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public OperaDriver(OperaOptions options) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.opera.OperaDriver(options);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public OperaDriver(OperaDriverService service, OperaOptions options) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.opera.OperaDriver(service, options);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     @Deprecated
     public OperaDriver(OperaDriverService service, Capabilities capabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.opera.OperaDriver(service, capabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     @Override
-    public org.openqa.selenium.remote.RemoteWebDriver getDriver() {
-        return operaDriver;
-    }
-
-    @Override
-    public Reporter getReporter() {
-        return reporter;
+    String getDeviceName() {
+        return "Opera";
     }
 }

@@ -1,6 +1,5 @@
 package com.testpros.fast;
 
-import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
@@ -13,45 +12,51 @@ import java.net.URL;
 
 public class AndroidDriver<T extends WebElement> extends RemoteWebDriver {
 
-    io.appium.java_client.android.AndroidDriver androidDriver;
-    Reporter reporter = new Reporter(null);
-
     public AndroidDriver(HttpCommandExecutor executor, Capabilities capabilities) {
-        Step step = new Step("Launching new Android instance",
-                "New AndroidDriver successfully starts");
+        Step step = setupStep();
         try {
-            androidDriver = new io.appium.java_client.android.AndroidDriver<>(executor, capabilities);
-            reporter = new Reporter(androidDriver);
-            step.setActual("AndroidDriver successfully started");
-            step.setStatus(Step.Status.PASS);
+            remoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(executor, capabilities);
+            passStep(step);
         } catch (Exception e) {
-            step.setActual("Unable to launch new android instance: " + e);
-            step.setStatus(Step.Status.FAIL);
+            failStep(step, e);
         } finally {
             reporter.addStep(step);
         }
     }
 
     public AndroidDriver(URL remoteAddress, Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(remoteAddress, desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public AndroidDriver(URL remoteAddress, HttpClient.Factory httpClientFactory,
                          Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(remoteAddress,
+                    httpClientFactory, desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public AndroidDriver(AppiumDriverLocalService service, Capabilities desiredCapabilities) {
-        Step step = new Step("Launching new Android instance",
-                "New AndroidDriver successfully starts");
+        Step step = setupStep();
         try {
-            androidDriver = new io.appium.java_client.android.AndroidDriver<>(service, desiredCapabilities);
-            reporter = new Reporter(androidDriver);
-            step.setActual("AndroidDriver successfully started");
-            step.setStatus(Step.Status.PASS);
+            remoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(service, desiredCapabilities);
+            passStep(step);
         } catch (Exception e) {
-            step.setActual("Unable to launch new android instance: " + e);
-            step.setStatus(Step.Status.FAIL);
+            failStep(step, e);
         } finally {
             reporter.addStep(step);
         }
@@ -59,33 +64,72 @@ public class AndroidDriver<T extends WebElement> extends RemoteWebDriver {
 
     public AndroidDriver(AppiumDriverLocalService service, HttpClient.Factory httpClientFactory,
                          Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(service,
+                    httpClientFactory, desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public AndroidDriver(AppiumServiceBuilder builder, Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(builder,
+                    desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public AndroidDriver(AppiumServiceBuilder builder, HttpClient.Factory httpClientFactory,
                          Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(builder,
+                    desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public AndroidDriver(HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(httpClientFactory,
+                    desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public AndroidDriver(Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     @Override
-    public org.openqa.selenium.remote.RemoteWebDriver getDriver() {
-        return androidDriver;
-    }
-
-    @Override
-    public Reporter getReporter() {
-        return reporter;
+    String getDeviceName() {
+        return "Android";
     }
 }

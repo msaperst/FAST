@@ -1,6 +1,5 @@
 package com.testpros.fast;
 
-import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.ie.InternetExplorerDriverService;
@@ -8,20 +7,13 @@ import org.openqa.selenium.ie.InternetExplorerOptions;
 
 public class InternetExplorerDriver extends RemoteWebDriver {
 
-    org.openqa.selenium.ie.InternetExplorerDriver internetExplorerDriver;
-    Reporter reporter = new Reporter(null);
-
     public InternetExplorerDriver() {
-        Step step = new Step("Launching new InternetExplorer instance",
-                "New InternetExplorerDriver successfully starts");
+        Step step = setupStep();
         try {
-            internetExplorerDriver = new org.openqa.selenium.ie.InternetExplorerDriver();
-            reporter = new Reporter(internetExplorerDriver);
-            step.setActual("InternetExplorerDriver successfully started");
-            step.setStatus(Step.Status.PASS);
+            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver();
+            passStep(step);
         } catch (Exception e) {
-            step.setActual("Unable to launch new internetexplorer instance: " + e);
-            step.setStatus(Step.Status.FAIL);
+            failStep(step, e);
         } finally {
             reporter.addStep(step);
         }
@@ -29,48 +21,94 @@ public class InternetExplorerDriver extends RemoteWebDriver {
 
     @Deprecated
     public InternetExplorerDriver(Capabilities capabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(capabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public InternetExplorerDriver(InternetExplorerOptions options) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(options);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     @Deprecated
     public InternetExplorerDriver(int port) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(port);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public InternetExplorerDriver(InternetExplorerDriverService service) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     @Deprecated
     public InternetExplorerDriver(InternetExplorerDriverService service, Capabilities capabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service, capabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public InternetExplorerDriver(InternetExplorerDriverService service, InternetExplorerOptions options) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service, options);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
+
     @Deprecated
-    public InternetExplorerDriver(
-            InternetExplorerDriverService service,
-            Capabilities capabilities,
-            int port) {
-        //TODO
-    }
-
-
-
-
-    @Override
-    public org.openqa.selenium.remote.RemoteWebDriver getDriver() {
-        return internetExplorerDriver;
+    public InternetExplorerDriver(InternetExplorerDriverService service, Capabilities capabilities, int port) {
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service, capabilities, port);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     @Override
-    public Reporter getReporter() {
-        return reporter;
+    String getDeviceName() {
+        return "Internet Explorer";
     }
 }

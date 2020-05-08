@@ -1,6 +1,5 @@
 package com.testpros.fast;
 
-import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -9,20 +8,13 @@ import org.openqa.selenium.firefox.XpiDriverService;
 
 public class FirefoxDriver extends RemoteWebDriver {
 
-    org.openqa.selenium.firefox.FirefoxDriver firefoxDriver;
-    Reporter reporter = new Reporter(null);
-
     public FirefoxDriver() {
-        Step step = new Step("Launching new Firefox instance",
-                "New FirefoxDriver successfully starts");
+        Step step = setupStep();
         try {
-            firefoxDriver = new org.openqa.selenium.firefox.FirefoxDriver();
-            reporter = new Reporter(firefoxDriver);
-            step.setActual("FirefoxDriver successfully started");
-            step.setStatus(Step.Status.PASS);
+            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver();
+            passStep(step);
         } catch (Exception e) {
-            step.setActual("Unable to launch new firefox instance: " + e);
-            step.setStatus(Step.Status.FAIL);
+            failStep(step, e);
         } finally {
             reporter.addStep(step);
         }
@@ -30,41 +22,92 @@ public class FirefoxDriver extends RemoteWebDriver {
 
     @Deprecated
     public FirefoxDriver(Capabilities capabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(capabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     @Deprecated
     public FirefoxDriver(GeckoDriverService service, Capabilities desiredCapabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service, desiredCapabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public FirefoxDriver(FirefoxOptions options) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(options);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public FirefoxDriver(GeckoDriverService service) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public FirefoxDriver(XpiDriverService service) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public FirefoxDriver(GeckoDriverService service, FirefoxOptions options) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service, options);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public FirefoxDriver(XpiDriverService service, FirefoxOptions options) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service, options);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     @Override
-    public org.openqa.selenium.remote.RemoteWebDriver getDriver() {
-        return firefoxDriver;
-    }
-
-    @Override
-    public Reporter getReporter() {
-        return reporter;
+    String getDeviceName() {
+        return "Firefox";
     }
 }

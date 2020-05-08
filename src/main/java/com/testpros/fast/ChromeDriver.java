@@ -1,6 +1,5 @@
 package com.testpros.fast;
 
-import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.chrome.ChromeDriverService;
@@ -8,55 +7,82 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 public class ChromeDriver extends RemoteWebDriver {
 
-    org.openqa.selenium.chrome.ChromeDriver chromeDriver;
-    Reporter reporter = new Reporter(null);
-
     public ChromeDriver() {
-        Step step = new Step("Launching new Chrome instance",
-                "New ChromeDriver successfully starts");
+        Step step = setupStep();
         try {
-            chromeDriver = new org.openqa.selenium.chrome.ChromeDriver();
-            reporter = new Reporter(chromeDriver);
-            step.setActual("ChromeDriver successfully started");
-            step.setStatus(Step.Status.PASS);
+            remoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver();
+            passStep(step);
         } catch (Exception e) {
-            step.setActual("Unable to launch new chrome instance: " + e);
-            step.setStatus(Step.Status.FAIL);
+            failStep(step, e);
         } finally {
             reporter.addStep(step);
         }
     }
 
     public ChromeDriver(ChromeDriverService service) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(service);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     @Deprecated
     public ChromeDriver(Capabilities capabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(capabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public ChromeDriver(ChromeOptions options) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(options);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     public ChromeDriver(ChromeDriverService service, ChromeOptions options) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(service, options);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
     @Deprecated
     public ChromeDriver(ChromeDriverService service, Capabilities capabilities) {
-        //TODO
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(service, capabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
     }
 
-
     @Override
-    public org.openqa.selenium.remote.RemoteWebDriver getDriver() {
-        return chromeDriver;
-    }
-
-    @Override
-    public Reporter getReporter() {
-        return reporter;
+    String getDeviceName() {
+        return "Chrome";
     }
 }

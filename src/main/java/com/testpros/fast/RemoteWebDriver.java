@@ -3,26 +3,98 @@ package com.testpros.fast;
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import com.testpros.fast.reporter.Step.Status;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.remote.CommandExecutor;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public abstract class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver implements WebDriver {
 
+    org.openqa.selenium.remote.RemoteWebDriver remoteWebDriver;
+    Reporter reporter = new Reporter(null);
+
     //wait times
     long waitTime = 5;
     long pollTime = 50;
 
-    public abstract Reporter getReporter();
+    public Reporter getReporter() {
+        return reporter;
+    }
 
-    public abstract org.openqa.selenium.remote.RemoteWebDriver getDriver();
-    
+    public org.openqa.selenium.remote.RemoteWebDriver getDriver() {
+        return remoteWebDriver;
+    }
+
+    abstract String getDeviceName();
+
+    String getDriverName() {
+        return getDeviceName().replaceAll(" ", "") + "Driver";
+    }
+
+    Step setupStep() {
+        return new Step("Launching new " + getDeviceName() + " instance",
+                "New " + getDriverName() + " successfully starts");
+    }
+
+    void passStep(Step step) {
+        step.setActual(getDriverName() + " successfully started");
+        step.setStatus(Step.Status.PASS);
+        reporter = new Reporter(remoteWebDriver);
+    }
+
+    void failStep(Step step, Exception e) {
+        step.setActual("Unable to launch new " + getDeviceName() + " instance: " + e);
+        step.setStatus(Step.Status.FAIL);
+    }
+
+    protected RemoteWebDriver() {
+        //Do nothing, just for child implementations
+    }
+
+    public RemoteWebDriver(Capabilities capabilities) {
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.remote.RemoteWebDriver(capabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
+    }
+
+    public RemoteWebDriver(CommandExecutor executor, Capabilities capabilities) {
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.remote.RemoteWebDriver(executor, capabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
+    }
+
+    public RemoteWebDriver(URL remoteAddress, Capabilities capabilities) {
+        Step step = setupStep();
+        try {
+            remoteWebDriver = new org.openqa.selenium.remote.RemoteWebDriver(remoteAddress, capabilities);
+            passStep(step);
+        } catch (Exception e) {
+            failStep(step, e);
+        } finally {
+            reporter.addStep(step);
+        }
+    }
+
     /**
      * Load a new web page in the current browser window. This is done using an HTTP GET operation,
      * and the method will block until the load is complete. This will follow redirects issued either
@@ -192,14 +264,14 @@ public abstract class RemoteWebDriver extends org.openqa.selenium.remote.RemoteW
      */
     @Override
     public void quit() {
-        Step step = new Step("Exiting WebDriver session",
-                "Driver successfully quits");
+        Step step = new Step("Destroying " + getDeviceName() + " instance",
+                getDriverName() + " successfully stops");
         try {
             getDriver().quit();
-            step.setActual("Application successfully closed");
+            step.setActual(getDriverName() + " successfully stopped");
             step.setStatus(Status.PASS);
         } catch (Exception e) {
-            step.setActual("Unable to quit application: " + e);
+            step.setActual("Unable to destroy " + getDeviceName() + " instance: " + e);
             step.setStatus(Status.FAIL);
         } finally {
             getReporter().addStep(step, false);
