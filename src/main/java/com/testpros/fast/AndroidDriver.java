@@ -5,12 +5,13 @@ import com.testpros.fast.reporter.Step;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.HttpCommandExecutor;
 import org.openqa.selenium.remote.http.HttpClient;
 
 import java.net.URL;
 
-public class AndroidDriver extends RemoteWebDriver {
+public class AndroidDriver<T extends WebElement> extends RemoteWebDriver {
 
     io.appium.java_client.android.AndroidDriver androidDriver;
     Reporter reporter = new Reporter(null);

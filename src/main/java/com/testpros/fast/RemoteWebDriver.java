@@ -15,22 +15,9 @@ import java.util.Set;
 
 public abstract class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver implements WebDriver {
 
-//    org.openqa.selenium.WebDriver driver;
-//    Reporter reporter;
-
     //wait times
     long waitTime = 5;
     long pollTime = 50;
-//
-//    public WebDriver(org.openqa.selenium.WebDriver driver) {
-//        // TODO - consider logging this
-//        getDriver() = driver;
-//        reporter = new Reporter(driver);
-//    }
-//
-//    public Reporter getReporter() {
-//        return reporter;
-//    }
 
     public abstract Reporter getReporter();
 

@@ -29,15 +29,6 @@ You can do it in a few simple steps.
 1. Add the FAST dependency to your project
 2. Change the imports in your project from `org.openqa.selenium.*` to 
 `com.testpros.fast.*`
-3. Instead of creating your driver from ChromeDriver or another browser, 
-create it with a new WebDriver constructor, and pass the ChromeDriver 
-(or other browser)
-        
-        WebDriver driver = new ChromeDriver();
-    becomes
-    
-        WebDriver driver = new WebDriver(new ChromeDriver());
-        
 4. After quitting your webdriver session (`driver.quit()`) write out your logs
 
         driver.getReporter().simpleOut("[YOUR TEST NAME HERE]"); 

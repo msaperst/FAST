@@ -18,9 +18,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-
 public class FastIT {
 
     WebDriver driver;
@@ -51,7 +48,7 @@ public class FastIT {
                 capabilities.setCapability(MobileCapabilityType.APP, "src/test/resources/flipkart.apk");
                 capabilities.setCapability("autoGrantPermissions", "true");
             }
-            driver = new AndroidDriver(service, capabilities);
+            driver = new AndroidDriver<>(service, capabilities);
         } else { // else, it's a selenium test case, so setup our chrome driver
 //            WebDriverManager.chromedriver().forceCache().setup();
 //            driver = new ChromeDriver();
@@ -75,18 +72,10 @@ public class FastIT {
         rest.post(wordpressURL + "wp-login.php?action=login-endpoint", params);
 
         driver.get(wordpressURL + "me");
-        Step step = new Step("", "Expected element '" + displayName + "' to have text '" + Property.getProperty("username") + "'");
         String displayNameText = driver.findElement(displayName).getText();
-        try {
-            assertEquals(displayNameText, Property.getProperty("username"));
-            step.setStatus(Status.PASS);
-        } catch (AssertionError e){
-            step.setStatus(Status.FAIL);
-            throw e;
-        } finally {
-            step.setActual("Element '" + displayName + "' has text '" + displayNameText + "'");
-            driver.getReporter().addStep(step);
-        }
+        assertEquals(displayNameText, Property.getProperty("username"),
+                "Expected element '" + displayName + "' to have text '" + Property.getProperty("username") + "'",
+                "Element '" + displayName + "' has text '" + displayNameText + "'");
     }
 
     @Test
@@ -97,36 +86,32 @@ public class FastIT {
         rest.post(wordpressURL + "wp-login.php?action=login-endpoint", params);
 
         driver.get(wordpressURL + "me");
-        Step step = new Step("", "Expected element '" + displayName + "' to have text '" + Property.getProperty("username") + "'");
         String displayNameValue = driver.findElement(displayName).getAttribute("value");
-        try {
-            assertEquals(displayNameValue, Property.getProperty("username"));
-            step.setStatus(Status.PASS);
-        } catch (AssertionError e){
-            step.setStatus(Status.FAIL);
-            throw e;
-        } finally {
-            step.setActual("Element '" + displayName + "' has text '" + displayNameValue + "'");
-            driver.getReporter().addStep(step);
-        }
+        assertEquals(displayNameValue, Property.getProperty("username"),
+                "Expected element '" + displayName + "' to have text '" + Property.getProperty("username") + "'",
+                "Element '" + displayName + "' has text '" + displayNameValue + "'");
     }
 
-//    @Test
-//    public void appiumNativeSampleTest() {
-//        By userId = By.id("mobileNo");
-//        By password = By.id("et_password");
-//        By loginButton = By.id("btn_mlogin");
-//        By existingUserLogin = By.id("btn_mlogin");
-//        By errorMessage = By.id("pageLevelError");
-//
-//        driver.findElement(existingUserLogin).click();
-//        WebElement userIdElement = driver.findElement(userId);
-//        userIdElement.clear();
-//        userIdElement.sendKeys(Property.getProperty("username"));
-//        driver.findElement(password).sendKeys(Property.getProperty("password"));
-//        driver.findElement(loginButton).click();
-//        assertTrue(driver.findElement(errorMessage).getText().equalsIgnoreCase("Account does not exist"));
-//    }
+    @Test
+    public void appiumNativeSampleTest() {
+        By userId = By.id("mobileNo");
+        By password = By.id("et_password");
+        By loginButton = By.id("btn_mlogin");
+        By existingUserLogin = By.id("btn_mlogin");
+        By errorMessage = By.id("pageLevelError");
+
+        driver.findElement(existingUserLogin).click();
+        WebElement userIdElement = driver.findElement(userId);
+        //userIdElement.clear();
+        userIdElement.sendKeys(Property.getProperty("username"));
+        driver.findElement(password).sendKeys(Property.getProperty("password"));
+        driver.findElement(loginButton).click();
+        String errorMessageText = driver.findElement(errorMessage).getText();
+
+        assertEquals(errorMessageText, "Account does not exist",
+                "Expected element '" + errorMessage + "' to have text 'Account does not exist'",
+                "Element '" + errorMessage + "' has text '" + errorMessageText + "'");
+    }
 
     @AfterMethod(alwaysRun = true)
     public void cleanup(Method method) {
@@ -135,5 +120,19 @@ public class FastIT {
             service.stop();
         }
         driver.getReporter().simpleOut(method.getName());
+    }
+
+    private void assertEquals(Object actual, Object expected, String expectedString, String actualString) {
+        Step step = new Step("", expectedString);
+        try {
+            org.testng.Assert.assertEquals(expected, actual);
+            step.setStatus(Status.PASS);
+        } catch (AssertionError e){
+            step.setStatus(Status.FAIL);
+            throw e;
+        } finally {
+            step.setActual(actualString);
+            driver.getReporter().addStep(step);
+        }
     }
 }
