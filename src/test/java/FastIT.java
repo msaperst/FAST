@@ -50,10 +50,10 @@ public class FastIT {
             }
             driver = new AndroidDriver<>(service, capabilities);
         } else { // else, it's a selenium test case, so setup our chrome driver
-//            WebDriverManager.chromedriver().forceCache().setup();
-//            driver = new ChromeDriver();
-            WebDriverManager.firefoxdriver().forceCache().setup();
-            driver = new FirefoxDriver();
+            WebDriverManager.chromedriver().forceCache().setup();
+            driver = new ChromeDriver();
+//            WebDriverManager.firefoxdriver().forceCache().setup();
+//            driver = new FirefoxDriver();
         }
         rest = new WebRest(driver);
 

@@ -88,11 +88,11 @@
 
         <!-- Functional test run information -->
         <maven.failsafe.plugin.version>2.22.2</maven.failsafe.plugin.version>
-        <failsafe.threads>5</failsafe.threads>
+        <failsafe.threads>1</failsafe.threads>
         <failsafe.verbosity>0</failsafe.verbosity>
         <failsafe.groups.include/>
         <failsafe.groups.exclude/>
-        <failsafe.files.include>**/FastExampleIT.java</failsafe.files.include>
+        <failsafe.files.include>**/FastIT.java</failsafe.files.include>
         <failsafe.files.exclude/>
         <skip.integration.tests>false</skip.integration.tests>
     </properties>
