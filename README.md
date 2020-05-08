@@ -1,4 +1,5 @@
 # F.A.S.T. - Framework for Appium and Selenium Testing
+## FAST Java Library
 Start writing your Appium and Selenium tests **fast**
 
 Convert **fast** from strait Appium and Selenium tests to FAST
@@ -28,15 +29,6 @@ You can do it in a few simple steps.
 1. Add the FAST dependency to your project
 2. Change the imports in your project from `org.openqa.selenium.*` to 
 `com.testpros.fast.*`
-3. Instead of creating your driver from ChromeDriver or another browser, 
-create it with a new WebDriver constructor, and pass the ChromeDriver 
-(or other browser)
-        
-        WebDriver driver = new ChromeDriver();
-    becomes
-    
-        WebDriver driver = new WebDriver(new ChromeDriver());
-        
 4. After quitting your webdriver session (`driver.quit()`) write out your logs
 
         driver.getReporter().simpleOut("[YOUR TEST NAME HERE]"); 
@@ -114,7 +106,7 @@ import org.testng.annotations.*;
 
 import static org.testng.Assert.assertEquals;
 
-public class WebDriverTestNGIT {
+public class WebDriverIT {
 
     WebDriver driver;
 
@@ -151,7 +143,7 @@ import java.lang.reflect.Method;
 
 import static org.testng.Assert.assertEquals;
 
-public class FASTTestNGIT {
+public class FastIT {
 
     WebDriver driver;
 
@@ -189,3 +181,6 @@ test case name could be recorded in the reporter.
   - custom - still need negatives
   - built ins (now autowaits for element present, still needs to wait for custom actions (e.g. editable for sendKeys))
 - JavaDocs
+- More tracability
+  - All-Screen screenshot
+  - recording... 

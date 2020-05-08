@@ -1,8 +1,6 @@
-import com.testpros.fast.By;
-import com.testpros.fast.WebDriver;
-import com.testpros.fast.WebElement;
-import com.testpros.fast.WebRest;
-import io.appium.java_client.android.AndroidDriver;
+import com.testpros.fast.*;
+import com.testpros.fast.reporter.Step;
+import com.testpros.fast.reporter.Step.Status;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -10,7 +8,6 @@ import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -21,14 +18,14 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-
-public class FASTTestNGIT {
+public class FastIT {
 
     WebDriver driver;
     WebRest rest;
     AppiumDriverLocalService service;
+
+    String wordpressURL = "https://wordpress.com/";
+    List<NameValuePair> params = new ArrayList<>();
 
     @BeforeMethod
     public void setup(Method method) {
@@ -51,40 +48,48 @@ public class FASTTestNGIT {
                 capabilities.setCapability(MobileCapabilityType.APP, "src/test/resources/flipkart.apk");
                 capabilities.setCapability("autoGrantPermissions", "true");
             }
-            driver = new WebDriver(new AndroidDriver<>(service, capabilities));
+            driver = new AndroidDriver<>(service, capabilities);
         } else { // else, it's a selenium test case, so setup our chrome driver
             WebDriverManager.chromedriver().forceCache().setup();
-            driver = new WebDriver(new ChromeDriver());
+            driver = new ChromeDriver();
+//            WebDriverManager.firefoxdriver().forceCache().setup();
+//            driver = new FirefoxDriver();
         }
         rest = new WebRest(driver);
+
+        //setup our login params
+        params.add(new BasicNameValuePair("username", Property.getProperty("username")));
+        params.add(new BasicNameValuePair("password", Property.getProperty("password")));
+        params.add(new BasicNameValuePair("client_id", Property.getProperty("clientId")));
+        params.add(new BasicNameValuePair("client_secret", Property.getProperty("clientSecret")));
     }
 
     @Test
     public void seleniumSampleTest() throws IOException {
-        driver.get("https://wordpress.com/");
-        List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("username", Property.getProperty("username")));
-        params.add(new BasicNameValuePair("password", Property.getProperty("password")));
-        params.add(new BasicNameValuePair("client_id", Property.getProperty("clientId")));
-        params.add(new BasicNameValuePair("client_secret", Property.getProperty("clientSecret")));
-        rest.post("https://wordpress.com/wp-login.php?action=login-endpoint", params);
+        By displayName = By.className("profile-gravatar__user-display-name");
 
-        driver.get("https://wordpress.com/me");
-        assertEquals(driver.findElement(By.className("profile-gravatar__user-display-name")).getText(), Property.getProperty("username"));
+        driver.get(wordpressURL);
+        rest.post(wordpressURL + "wp-login.php?action=login-endpoint", params);
+
+        driver.get(wordpressURL + "me");
+        String displayNameText = driver.findElement(displayName).getText();
+        assertEquals(displayNameText, Property.getProperty("username"),
+                "Expected element '" + displayName + "' to have text '" + Property.getProperty("username") + "'",
+                "Element '" + displayName + "' has text '" + displayNameText + "'");
     }
 
     @Test
     public void appiumBrowserSampleTest() throws IOException {
-        driver.get("https://wordpress.com/");
-        List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("username", Property.getProperty("username")));
-        params.add(new BasicNameValuePair("password", Property.getProperty("password")));
-        params.add(new BasicNameValuePair("client_id", Property.getProperty("clientId")));
-        params.add(new BasicNameValuePair("client_secret", Property.getProperty("clientSecret")));
-        rest.post("https://wordpress.com/wp-login.php?action=login-endpoint", params);
+        By displayName = By.id("display_name");
 
-        driver.get("https://wordpress.com/me");
-        assertEquals(driver.findElement(By.id("display_name")).getAttribute("value"), Property.getProperty("username"));
+        driver.get(wordpressURL);
+        rest.post(wordpressURL + "wp-login.php?action=login-endpoint", params);
+
+        driver.get(wordpressURL + "me");
+        String displayNameValue = driver.findElement(displayName).getAttribute("value");
+        assertEquals(displayNameValue, Property.getProperty("username"),
+                "Expected element '" + displayName + "' to have text '" + Property.getProperty("username") + "'",
+                "Element '" + displayName + "' has text '" + displayNameValue + "'");
     }
 
     @Test
@@ -97,11 +102,15 @@ public class FASTTestNGIT {
 
         driver.findElement(existingUserLogin).click();
         WebElement userIdElement = driver.findElement(userId);
-        userIdElement.clear();
-        userIdElement.sendKeys("someone@testvagrant.com");
-        driver.findElement(password).sendKeys("testvagrant123");
+        //userIdElement.clear();
+        userIdElement.sendKeys(Property.getProperty("username"));
+        driver.findElement(password).sendKeys(Property.getProperty("password"));
         driver.findElement(loginButton).click();
-        assertTrue(driver.findElement(errorMessage).getText().equalsIgnoreCase("Account does not exist"));
+        String errorMessageText = driver.findElement(errorMessage).getText();
+
+        assertEquals(errorMessageText, "Account does not exist",
+                "Expected element '" + errorMessage + "' to have text 'Account does not exist'",
+                "Element '" + errorMessage + "' has text '" + errorMessageText + "'");
     }
 
     @AfterMethod(alwaysRun = true)
@@ -111,5 +120,19 @@ public class FASTTestNGIT {
             service.stop();
         }
         driver.getReporter().simpleOut(method.getName());
+    }
+
+    private void assertEquals(Object actual, Object expected, String expectedString, String actualString) {
+        Step step = new Step("", expectedString);
+        try {
+            org.testng.Assert.assertEquals(expected, actual);
+            step.setStatus(Status.PASS);
+        } catch (AssertionError e){
+            step.setStatus(Status.FAIL);
+            throw e;
+        } finally {
+            step.setActual(actualString);
+            driver.getReporter().addStep(step);
+        }
     }
 }
