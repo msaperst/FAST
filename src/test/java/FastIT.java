@@ -15,6 +15,8 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class FastIT {
     List<NameValuePair> params = new ArrayList<>();
 
     @BeforeMethod
-    public void setup(Method method) {
+    public void setup(Method method) throws MalformedURLException {
         // if an appium test case, setup our appium server
         if (method.getName().startsWith("appium")) {
             service = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().usingAnyFreePort());
@@ -50,10 +52,13 @@ public class FastIT {
             }
             driver = new AndroidDriver<>(service, capabilities);
         } else { // else, it's a selenium test case, so setup our chrome driver
-            WebDriverManager.chromedriver().forceCache().setup();
-            driver = new ChromeDriver();
+//            WebDriverManager.chromedriver().forceCache().setup();
+//            driver = new ChromeDriver();
 //            WebDriverManager.firefoxdriver().forceCache().setup();
 //            driver = new FirefoxDriver();
+            DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+//            DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+            driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), capabilities);
         }
         rest = new WebRest(driver);
 
@@ -127,7 +132,7 @@ public class FastIT {
         try {
             org.testng.Assert.assertEquals(expected, actual);
             step.setStatus(Status.PASS);
-        } catch (AssertionError e){
+        } catch (AssertionError e) {
             step.setStatus(Status.FAIL);
             throw e;
         } finally {

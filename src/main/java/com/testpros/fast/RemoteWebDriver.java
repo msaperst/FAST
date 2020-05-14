@@ -16,9 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public abstract class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver implements WebDriver {
+public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver implements WebDriver {
 
     org.openqa.selenium.remote.RemoteWebDriver remoteWebDriver;
+    Capabilities capabilities;
     Reporter reporter = new Reporter(null);
 
     //wait times
@@ -33,7 +34,9 @@ public abstract class RemoteWebDriver extends org.openqa.selenium.remote.RemoteW
         return remoteWebDriver;
     }
 
-    abstract String getDeviceName();
+    String getDeviceName() {
+        return "Remote " + Reporter.capitalizeFirstLetter(capabilities.getBrowserName());
+    }
 
     String getDriverName() {
         return getDeviceName().replaceAll(" ", "") + "Driver";
@@ -47,12 +50,17 @@ public abstract class RemoteWebDriver extends org.openqa.selenium.remote.RemoteW
     void passStep(Step step) {
         step.setActual(getDriverName() + " successfully started");
         step.setStatus(Step.Status.PASS);
-        reporter = new Reporter(remoteWebDriver);
+        if (reporter.getDriver() == null) {
+            reporter = new Reporter(remoteWebDriver);
+        }
     }
 
     void failStep(Step step, Exception e) {
         step.setActual("Unable to launch new " + getDeviceName() + " instance: " + e);
         step.setStatus(Step.Status.FAIL);
+        if (reporter.getDriver() == null) {
+            reporter = new Reporter(remoteWebDriver);
+        }
     }
 
     protected RemoteWebDriver() {
@@ -60,6 +68,7 @@ public abstract class RemoteWebDriver extends org.openqa.selenium.remote.RemoteW
     }
 
     public RemoteWebDriver(Capabilities capabilities) {
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             remoteWebDriver = new org.openqa.selenium.remote.RemoteWebDriver(capabilities);
@@ -72,6 +81,7 @@ public abstract class RemoteWebDriver extends org.openqa.selenium.remote.RemoteW
     }
 
     public RemoteWebDriver(CommandExecutor executor, Capabilities capabilities) {
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             remoteWebDriver = new org.openqa.selenium.remote.RemoteWebDriver(executor, capabilities);
@@ -84,6 +94,7 @@ public abstract class RemoteWebDriver extends org.openqa.selenium.remote.RemoteW
     }
 
     public RemoteWebDriver(URL remoteAddress, Capabilities capabilities) {
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             remoteWebDriver = new org.openqa.selenium.remote.RemoteWebDriver(remoteAddress, capabilities);
