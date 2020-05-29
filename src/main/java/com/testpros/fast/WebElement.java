@@ -170,7 +170,7 @@ public class WebElement implements org.openqa.selenium.WebElement {
                 step.setStatus(Status.PASS);
             }
         } catch (Exception e) {
-            step.setActual("Unable to submit element: " + e);
+            step.setActual("Unable to clear element content: " + e);
             step.setStatus(Status.FAIL);
         } finally {
             reporter.addStep(step);
@@ -322,19 +322,16 @@ public class WebElement implements org.openqa.selenium.WebElement {
      * aware that webdriver follows standard conventions: a search prefixed with "//" will search the
      * entire document, not just the children of this current node. Use ".//" to limit your search to
      * the children of this WebElement.
-     * Rather than use the 'implicit wait' times in force at the time of execution, this method has a
-     * fluent wait built into it. This fluent wait checks for any elements matching the locator to be
-     * present, and when there is at least one match, it will proceed. If there are no matches after the
-     * timeout, an error will be thrown.
+     * Unlike the findElement, there is no fluent wait built in, and it also doesn't use the
+     * 'implicit wait' times in force at the time of execution. If you want a wait before
+     * returning the list (ensuring at least one element is returned, run a
+     * {@link RemoteWebDriver#waitForElementPresent(By)} before calling this method
      *
      * @param by The locating mechanism to use
-     * @return A list of all {@link WebElement}s, or an empty list if nothing matches. // TODO - this isn't currently accurate
+     * @return A list of all {@link WebElement}s, or an empty list if nothing matches.
      * @see By
      */
     public List<WebElement> findElements(By by) {
-        //TODO - consider changing this wait to better match the findElements wait functionality (return none if none)
-        // first wait, and ensure at least one match is available, but we'll throw it away
-        this.driver.waitForElementPresent(by);
         // not doing any logging, as this is just a check, nothing to log
         List<WebElement> webElements = new ArrayList<>();
         List<org.openqa.selenium.WebElement> elements = this.element.findElements(by);
