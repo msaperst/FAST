@@ -33,12 +33,10 @@ public class RemoteTargetLocator implements WebDriver.TargetLocator {
                 "Frame '" + index + "' successfully selected");
         try {
             WebDriver driver = targetLocator.frame(index);
-            step.setActual("Successfully switched to frame with index '" + index + "'");
-            step.setStatus(Step.Status.PASS);
+            step.setPassed("Successfully switched to frame with index '" + index + "'");
             return driver;
         } catch (Exception e) {
-            step.setActual("Unable to select frame: " + e);
-            step.setStatus(Step.Status.FAIL);
+            step.setFailed("Unable to select frame: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -59,12 +57,10 @@ public class RemoteTargetLocator implements WebDriver.TargetLocator {
                 "Frame '" + nameOrId + "' successfully selected");
         try {
             WebDriver driver = targetLocator.frame(nameOrId);
-            step.setActual("Successfully switched to frame with name or id '" + nameOrId + "'");
-            step.setStatus(Step.Status.PASS);
+            step.setPassed("Successfully switched to frame with name or id '" + nameOrId + "'");
             return driver;
         } catch (Exception e) {
-            step.setActual("Unable to select frame: " + e);
-            step.setStatus(Step.Status.FAIL);
+            step.setFailed("Unable to select frame: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -84,12 +80,10 @@ public class RemoteTargetLocator implements WebDriver.TargetLocator {
                 "Frame '" + frameElement + "' successfully selected");
         try {
             WebDriver driver = targetLocator.frame(frameElement);
-            step.setActual("Successfully switched to frame with element '" + frameElement + "'");
-            step.setStatus(Step.Status.PASS);
+            step.setPassed("Successfully switched to frame with element '" + frameElement + "'");
             return driver;
         } catch (Exception e) {
-            step.setActual("Unable to select frame: " + e);
-            step.setStatus(Step.Status.FAIL);
+            step.setFailed("Unable to select frame: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -107,12 +101,10 @@ public class RemoteTargetLocator implements WebDriver.TargetLocator {
         Step step = new Step("Switching to parent frame", "Parent frame successfully selected");
         try {
             WebDriver driver = targetLocator.parentFrame();
-            step.setActual("Successfully switched to parent frame");
-            step.setStatus(Step.Status.PASS);
+            step.setPassed("Successfully switched to parent frame");
             return driver;
         } catch (Exception e) {
-            step.setActual("Unable to select frame: " + e);
-            step.setStatus(Step.Status.FAIL);
+            step.setFailed("Unable to select frame: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -132,12 +124,10 @@ public class RemoteTargetLocator implements WebDriver.TargetLocator {
                 "Window '" + nameOrHandle + "' successfully selected");
         try {
             WebDriver driver = targetLocator.window(nameOrHandle);
-            step.setActual("Successfully switched to window with name or handle '" + nameOrHandle + "'");
-            step.setStatus(Step.Status.PASS);
+            step.setPassed("Successfully switched to window with name or handle '" + nameOrHandle + "'");
             return driver;
         } catch (Exception e) {
-            step.setActual("Unable to select window: " + e);
-            step.setStatus(Step.Status.FAIL);
+            step.setFailed("Unable to select window: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -156,12 +146,10 @@ public class RemoteTargetLocator implements WebDriver.TargetLocator {
                 "Default content successfully selected");
         try {
             WebDriver driver = targetLocator.defaultContent();
-            step.setActual("Successfully switched to default content");
-            step.setStatus(Step.Status.PASS);
+            step.setPassed("Successfully switched to default content");
             return driver;
         } catch (Exception e) {
-            step.setActual("Unable to select default content: " + e);
-            step.setStatus(Step.Status.FAIL);
+            step.setFailed("Unable to select default content: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -182,12 +170,10 @@ public class RemoteTargetLocator implements WebDriver.TargetLocator {
                 "Active element successfully selected");
         try {
             WebElement element = new WebElement(driver, targetLocator.activeElement(), 1);
-            step.setActual("Successfully switched to active element '" + element);
-            step.setStatus(Step.Status.PASS);
+            step.setPassed("Successfully switched to active element '" + element);
             return element;
         } catch (Exception e) {
-            step.setActual("Unable to select active element: " + e);
-            step.setStatus(Step.Status.FAIL);
+            step.setFailed("Unable to select active element: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -205,12 +191,10 @@ public class RemoteTargetLocator implements WebDriver.TargetLocator {
                 "Active element successfully selected");
         try {
             Alert alert = targetLocator.alert();
-            step.setActual("Successfully switched to active modal dialog '" + alert);
-            step.setStatus(Step.Status.PASS);
+            step.setPassed("Successfully switched to active modal dialog '" + alert);
             return alert;
         } catch (Exception e) {
-            step.setActual("Unable to select active modal dialog: " + e);
-            step.setStatus(Step.Status.FAIL);
+            step.setFailed("Unable to select active modal dialog: " + e);
         } finally {
             reporter.addStep(step);
         }

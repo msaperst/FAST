@@ -2,7 +2,6 @@ package com.testpros.fast;
 
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
-import com.testpros.fast.reporter.Step.Status;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -82,11 +81,9 @@ public class WebElement implements org.openqa.selenium.WebElement {
                 "Element '" + this.elementName + "' is present and visible and clicked");
         try {
             this.element.click();
-            step.setActual("Successfully clicked on element '" + this.elementName + "'");
-            step.setStatus(Status.PASS);
+            step.setPassed("Successfully clicked on element '" + this.elementName + "'");
         } catch (Exception e) {
-            step.setActual("Unable to click on element: " + e);
-            step.setStatus(Status.FAIL);
+            step.setFailed("Unable to click on element: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -107,11 +104,9 @@ public class WebElement implements org.openqa.selenium.WebElement {
                 "Element '" + this.elementName + "' is present and visible and submitted");
         try {
             this.element.submit();
-            step.setActual("Successfully submitted element '" + this.elementName + "'");
-            step.setStatus(Status.PASS);
+            step.setPassed("Successfully submitted element '" + this.elementName + "'");
         } catch (Exception e) {
-            step.setActual("Unable to submit element: " + e);
-            step.setStatus(Status.FAIL);
+            step.setFailed("Unable to submit element: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -133,12 +128,10 @@ public class WebElement implements org.openqa.selenium.WebElement {
                         charsSent + "' sent to it");
         try {
             this.element.sendKeys(keysToSend);
-            step.setActual("Successfully sent keys '" + charsSent +
+            step.setPassed("Successfully sent keys '" + charsSent +
                     "' to element '" + this.elementName + "'");
-            step.setStatus(Status.PASS);
         } catch (Exception e) {
-            step.setActual("Unable to send keys: " + e);
-            step.setStatus(Status.FAIL);
+            step.setFailed("Unable to send keys: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -163,15 +156,12 @@ public class WebElement implements org.openqa.selenium.WebElement {
             this.element.clear();
             step.setTime();
             if (!"".equals(getAttribute("value"))) {
-                step.setActual("Did not clear content from element '" + this.elementName + "'");
-                step.setStatus(Status.FAIL);
+                step.setFailed("Did not clear content from element '" + this.elementName + "'");
             } else {
-                step.setActual("Successfully cleared content from element '" + this.elementName + "'");
-                step.setStatus(Status.PASS);
+                step.setPassed("Successfully cleared content from element '" + this.elementName + "'");
             }
         } catch (Exception e) {
-            step.setActual("Unable to clear element content: " + e);
-            step.setStatus(Status.FAIL);
+            step.setFailed("Unable to clear element content: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -250,11 +240,9 @@ public class WebElement implements org.openqa.selenium.WebElement {
             try {
                 WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
                 wait.until((ExpectedCondition<Boolean>) d -> isSelected());
-                step.setStatus(Status.PASS);
-                step.setActual("Waited '" + step.getTime() + "' milliseconds for element '" + elementName + "' to be selected");
+                step.setPassed("Waited '" + step.getTime() + "' milliseconds for element '" + elementName + "' to be selected");
             } catch (TimeoutException e) {
-                step.setStatus(Status.FAIL);
-                step.setActual("After waiting '" + driver.waitTime + "' seconds, element '" + elementName + "' is not selected");
+                step.setFailed("After waiting '" + driver.waitTime + "' seconds, element '" + elementName + "' is not selected");
             } finally {
                 reporter.addStep(step);
             }
@@ -281,11 +269,9 @@ public class WebElement implements org.openqa.selenium.WebElement {
             try {
                 WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
                 wait.until((ExpectedCondition<Boolean>) d -> isEnabled());
-                step.setStatus(Status.PASS);
-                step.setActual("Waited '" + step.getTime() + "' milliseconds for element '" + elementName + "' to be enabled");
+                step.setPassed("Waited '" + step.getTime() + "' milliseconds for element '" + elementName + "' to be enabled");
             } catch (TimeoutException e) {
-                step.setStatus(Status.FAIL);
-                step.setActual("After waiting '" + driver.waitTime + "' seconds, element '" + elementName + "' is not enabled");
+                step.setFailed("After waiting '" + driver.waitTime + "' seconds, element '" + elementName + "' is not enabled");
             } finally {
                 reporter.addStep(step);
             }
@@ -295,9 +281,9 @@ public class WebElement implements org.openqa.selenium.WebElement {
     /**
      * Get the visible (i.e. not hidden by CSS) text of this element, including sub-elements.
      *
+     * @return The visible text of this element.
      * @see <a href="https://w3c.github.io/webdriver/#get-element-text">"Get Element Text" section
      * in W3C WebDriver Specification</a>
-     * @return The visible text of this element.
      */
     public String getText() {
         // not doing any logging, as this is just a check, nothing to log
@@ -373,11 +359,9 @@ public class WebElement implements org.openqa.selenium.WebElement {
             try {
                 WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
                 wait.until((ExpectedCondition<Boolean>) d -> isDisplayed());
-                step.setStatus(Status.PASS);
-                step.setActual("Waited '" + step.getTime() + "' milliseconds for element '" + elementName + "' to be displayed");
+                step.setPassed("Waited '" + step.getTime() + "' milliseconds for element '" + elementName + "' to be displayed");
             } catch (TimeoutException e) {
-                step.setStatus(Status.FAIL);
-                step.setActual("After waiting '" + driver.waitTime + "' seconds, element '" + elementName + "' is not displayed");
+                step.setFailed("After waiting '" + driver.waitTime + "' seconds, element '" + elementName + "' is not displayed");
             } finally {
                 reporter.addStep(step);
             }
