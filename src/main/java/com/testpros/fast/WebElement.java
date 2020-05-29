@@ -53,6 +53,7 @@ public class WebElement implements org.openqa.selenium.WebElement {
             byte[] fileContent = FileUtils.readFileToByteArray(fullPageScreenshot);
             screenshot = Base64.getEncoder().encodeToString(fileContent);
         } catch (IOException e) {
+            //TODO - properly handle this error
             e.printStackTrace();
         }
     }

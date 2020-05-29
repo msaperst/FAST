@@ -2,7 +2,6 @@ package com.testpros.fast;
 
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
-import com.testpros.fast.reporter.Step.Status;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -304,24 +303,21 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
         return getDriver().getWindowHandle();
     }
 
-    //TODO - need to dive into this
     @Override
     public TargetLocator switchTo() {
         // not doing any logging, as this is just a check, nothing to log
         return new com.testpros.fast.RemoteTargetLocator(this, getDriver().switchTo(), getReporter());
     }
 
-    //TODO - need to dive into this
     @Override
     public Navigation navigate() {
         // not doing any logging, as this is just a check, nothing to log
-        return getDriver().navigate();
+        return new com.testpros.fast.RemoteNavigation(this, getDriver().navigate(), getReporter());
     }
 
-    //TODO - need to dive into this
     @Override
     public Options manage() {
         // not doing any logging, as this is just a check, nothing to log
-        return getDriver().manage();
+        return new com.testpros.fast.RemoteWebDriverOptions(getDriver().manage(), getReporter());
     }
 }
