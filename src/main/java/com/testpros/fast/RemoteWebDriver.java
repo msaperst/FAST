@@ -48,16 +48,14 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
     }
 
     void passStep(Step step) {
-        step.setActual(getDriverName() + " successfully started");
-        step.setStatus(Step.Status.PASS);
+        step.setPassed(getDriverName() + " successfully started");
         if (reporter.getDriver() == null) {
             reporter = new Reporter(remoteWebDriver);
         }
     }
 
     void failStep(Step step, Exception e) {
-        step.setActual("Unable to launch new " + getDeviceName() + " instance: " + e);
-        step.setStatus(Step.Status.FAIL);
+        step.setFailed("Unable to launch new " + getDeviceName() + " instance: " + e);
         if (reporter.getDriver() == null) {
             reporter = new Reporter(remoteWebDriver);
         }
@@ -127,13 +125,12 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
             getDriver().get(url);
             step.setActual("Loaded URL of '" + getCurrentUrl() + "'");
             if (!url.equals(getCurrentUrl())) {
-                step.setStatus(Status.FAIL);
+                step.setFailed();
             } else {
-                step.setStatus(Status.PASS);
+                step.setPassed();
             }
         } catch (Exception e) {
-            step.setActual("Unable to load URL: " + e);
-            step.setStatus(Status.FAIL);
+            step.setFailed("Unable to load URL: " + e);
         } finally {
             getReporter().addStep(step);
         }
@@ -175,11 +172,9 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
             try {
                 WebDriverWait wait = new WebDriverWait(getDriver(), waitTime, pollTime);
                 wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
-                step.setStatus(Status.PASS);
-                step.setActual("Waited '" + step.getTime() + "' milliseconds for element '" + by + "' to be present");
+                step.setPassed("Waited '" + step.getTime() + "' milliseconds for element '" + by + "' to be present");
             } catch (TimeoutException e) {
-                step.setStatus(Status.FAIL);
-                step.setActual("After waiting '" + waitTime + "' seconds, element '" + by + "' is not present");
+                step.setFailed("After waiting '" + waitTime + "' seconds, element '" + by + "' is not present");
             } finally {
                 getReporter().addStep(step);
             }
@@ -266,15 +261,12 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
             getDriver().close();
             step.setTime();
             if (getWindowHandles().contains(windowHandle)) {
-                step.setActual("Window with handle '" + windowHandle + "' is still open");
-                step.setStatus(Status.FAIL);
+                step.setFailed("Window with handle '" + windowHandle + "' is still open");
             } else {
-                step.setActual("Window successfully closed");
-                step.setStatus(Status.PASS);
+                step.setPassed("Window successfully closed");
             }
         } catch (Exception e) {
-            step.setActual("Unable to close window: " + e);
-            step.setStatus(Status.FAIL);
+            step.setFailed("Unable to close window: " + e);
         } finally {
             getReporter().addStep(step);
         }
@@ -292,11 +284,9 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
                 getDriverName() + " successfully stops");
         try {
             getDriver().quit();
-            step.setActual(getDriverName() + " successfully stopped");
-            step.setStatus(Status.PASS);
+            step.setPassed(getDriverName() + " successfully stopped");
         } catch (Exception e) {
-            step.setActual("Unable to destroy " + getDeviceName() + " instance: " + e);
-            step.setStatus(Status.FAIL);
+            step.setFailed("Unable to destroy " + getDeviceName() + " instance: " + e);
         } finally {
             getReporter().addStep(step, false);
         }

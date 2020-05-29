@@ -174,13 +174,11 @@ public class WebRest {
             CloseableHttpResponse response = httpclient.execute(httpMethod, context);
             copyOverCookies(context);
             httpclient.close();
-            step.setActual("'" + methodName + "' call to '" + url + "' successfully returned");
+            step.setPassed("'" + methodName + "' call to '" + url + "' successfully returned");
             step.setResponse(response);
-            step.setStatus(Status.PASS);
             return response;
         } catch (Exception e) {
-            step.setActual("Unable to make '" + methodName + "' call: " + e);
-            step.setStatus(Status.FAIL);
+            step.setFailed("Unable to make '" + methodName + "' call: " + e);
         } finally {
             reporter.addStep(step, false);
         }

@@ -65,6 +65,27 @@ public class Step {
         return actual;
     }
 
+    public void setPassed() {
+        setStatus(Status.PASS);
+    }
+
+    public void setFailed() {
+        setStatus(Status.FAIL);
+    }
+
+    public void setPassed(String actual) {
+        setResult(actual, Status.PASS);
+    }
+
+    public void setFailed(String actual) {
+        setResult(actual, Status.FAIL);
+    }
+
+    public void setResult(String actual, Status status) {
+        setActual(actual);
+        setStatus(status);
+    }
+
     public void setActual(String actual) {
         setTime();
         this.actual = actual;
@@ -89,8 +110,7 @@ public class Step {
         return status;
     }
 
-
-    public void setStatus(Status status) {
+    private void setStatus(Status status) {
         setTime();
         this.status = status;
     }

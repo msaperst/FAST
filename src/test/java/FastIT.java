@@ -131,9 +131,9 @@ public class FastIT {
         Step step = new Step("", expectedString);
         try {
             org.testng.Assert.assertEquals(expected, actual);
-            step.setStatus(Status.PASS);
+            step.setPassed();
         } catch (AssertionError e) {
-            step.setStatus(Status.FAIL);
+            step.setFailed();
             throw e;
         } finally {
             step.setActual(actualString);
