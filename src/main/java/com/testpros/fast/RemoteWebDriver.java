@@ -213,9 +213,22 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
         return getDriver().findElement(by);
     }
 
+    /**
+     * Extends the basic Selenium findElements functionality to
+     * find all elements within the current context using the given mechanism. When using xpath be
+     * aware that webdriver follows standard conventions: a search prefixed with "//" will search the
+     * entire document, not just the children of this current node. Use ".//" to limit your search to
+     * the children of this WebElement.
+     * Unlike the findElement, there is no fluent wait built in, and it also doesn't use the
+     * 'implicit wait' times in force at the time of execution. If you want a wait before
+     * returning the list (ensuring at least one element is returned, run a
+     * {@link RemoteWebDriver#waitForElementPresent(By)} before calling this method
+     *
+     * @param by The locating mechanism to use
+     * @return A list of all {@link WebElement}s, or an empty list if nothing matches.
+     * @see By
+     */
     public List<WebElement> findElements(By by) {
-        // first wait, and ensure at least one match is available, but we'll throw it away
-        waitForElementPresent(by);
         // not doing any logging, as this is just a check, nothing to log
         List<WebElement> webElements = new ArrayList<>();
         List<org.openqa.selenium.WebElement> elements = getDriver().findElements(by);
@@ -305,7 +318,7 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
     @Override
     public TargetLocator switchTo() {
         // not doing any logging, as this is just a check, nothing to log
-        return getDriver().switchTo();
+        return new com.testpros.fast.RemoteTargetLocator(this, getDriver().switchTo(), getReporter());
     }
 
     //TODO - need to dive into this
