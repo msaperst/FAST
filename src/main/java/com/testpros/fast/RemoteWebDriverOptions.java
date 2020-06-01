@@ -113,7 +113,7 @@ public class RemoteWebDriverOptions implements Options {
     @Override
     public void deleteAllCookies() {
         Step step = new Step("Removing all cookies from browser session",
-                "All Cookies successfully deleted");
+                "All cookies successfully deleted");
         try {
             options.deleteAllCookies();
             step.setTime();
@@ -132,9 +132,6 @@ public class RemoteWebDriverOptions implements Options {
     /**
      * Get all the cookies for the current domain. This is the equivalent of calling
      * "document.cookie" and parsing the result
-     * Additionally, this will log the activity into the FAST reporter. If any errors
-     * are encountered it is considered a failure, and the error will be recorded, otherwise it
-     * will be considered a pass.
      *
      * @return A Set of cookies for the current domain.
      */
@@ -145,9 +142,7 @@ public class RemoteWebDriverOptions implements Options {
     }
 
     /**
-     * Get a cookie with a given name. Additionally, this will log the activity into the
-     * FAST reporter. If any errors are encountered it is considered a failure, and the
-     * error will be recorded, otherwise it will be considered a pass.
+     * Get a cookie with a given name.
      *
      * @param name the name of the cookie
      * @return the cookie, or null if no cookie with the given name is present
@@ -181,8 +176,8 @@ public class RemoteWebDriverOptions implements Options {
      */
     @Override
     public Window window() {
-        //TODO
-        return options.window();
+        // not doing any logging, as this is just a check, nothing to log
+        return new RemoteWindow(options.window(), reporter);
     }
 
     /**
@@ -194,7 +189,7 @@ public class RemoteWebDriverOptions implements Options {
      */
     @Override
     public Logs logs() {
-        // not doing any logging, as this is just a check, nothing to log
+        //TODO
         return options.logs();
     }
 }
