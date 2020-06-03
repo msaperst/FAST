@@ -29,7 +29,7 @@ public class RemoteNavigation implements Navigation {
                 "Navigated to the previous browser page");
         try {
             navigation.back();
-            step.setPassed("Successfully navigated to page '" + driver.getCurrentUrl());
+            step.setPassed("Navigated to page '" + driver.getCurrentUrl() + "'");
         } catch (Exception e) {
             step.setFailed("Unable to navigate back one page: " + e);
         } finally {
@@ -49,7 +49,7 @@ public class RemoteNavigation implements Navigation {
                 "Navigated to the next browser page");
         try {
             navigation.forward();
-            step.setPassed("Successfully navigated to page '" + driver.getCurrentUrl());
+            step.setPassed("Navigated to page '" + driver.getCurrentUrl() + "'");
         } catch (Exception e) {
             step.setFailed("Unable to navigate forward one page: " + e);
         } finally {
@@ -72,17 +72,18 @@ public class RemoteNavigation implements Navigation {
      */
     @Override
     public void to(String url) {
-        Step step = new Step("Navigating to the URL '" + url + "'", "Browser successfully on URL" + "'");
+        Step step = new Step("Navigating to URL '" + url + "'",
+                "Browser loaded URL");
         try {
             navigation.to(url);
-            step.setActual("Loaded URL of '" + driver.getCurrentUrl() + "'");
+            step.setActual("Navigated to URL '" + driver.getCurrentUrl() + "'");
             if (!url.equals(driver.getCurrentUrl())) {
                 step.setFailed();
             } else {
                 step.setPassed();
             }
         } catch (Exception e) {
-            step.setFailed("Unable to navigate to page: " + e);
+            step.setFailed("Unable to navigate to URL: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -98,17 +99,18 @@ public class RemoteNavigation implements Navigation {
      */
     @Override
     public void to(URL url) {
-        Step step = new Step("Navigating to the URL '" + url + "'", "Browser successfully on URL" + "'");
+        Step step = new Step("Navigating to URL '" + url + "'",
+                "Browser loaded URL");
         try {
             navigation.to(url);
-            step.setActual("Loaded URL of '" + driver.getCurrentUrl() + "'");
+            step.setActual("Navigated to URL '" + driver.getCurrentUrl() + "'");
             if (!url.toString().equals(driver.getCurrentUrl())) {
                 step.setFailed();
             } else {
                 step.setPassed();
             }
         } catch (Exception e) {
-            step.setFailed("Unable to navigate to page: " + e);
+            step.setFailed("Unable to navigate to URL: " + e);
         } finally {
             reporter.addStep(step);
         }
@@ -124,7 +126,7 @@ public class RemoteNavigation implements Navigation {
         Step step = new Step("Refreshing the current browser page", "Browser page displayed");
         try {
             navigation.refresh();
-            step.setPassed("Successfully refreshed the page");
+            step.setPassed("Refreshed the page");
         } catch (Exception e) {
             step.setFailed("Unable to refresh the page: " + e);
         } finally {

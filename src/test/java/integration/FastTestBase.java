@@ -3,6 +3,7 @@ package integration;
 import com.testpros.fast.ChromeDriver;
 import com.testpros.fast.WebDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -14,7 +15,9 @@ public class FastTestBase {
     @BeforeMethod
     public void setupDevice() {
         WebDriverManager.chromedriver().forceCache().setup();
-        drivers.set(new ChromeDriver());
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.setHeadless(true);
+        drivers.set(new ChromeDriver(chromeOptions));
     }
 
     @AfterMethod

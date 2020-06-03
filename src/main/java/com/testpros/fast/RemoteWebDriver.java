@@ -2,10 +2,7 @@ package com.testpros.fast;
 
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.CommandExecutor;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -14,16 +11,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
-public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver implements WebDriver {
+public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
 
     org.openqa.selenium.remote.RemoteWebDriver remoteWebDriver;
     Capabilities capabilities;
     Reporter reporter = new Reporter(null);
 
     //wait times
-    long waitTime = 5;
-    long pollTime = 50;
+    long waitTime = 5;  //TODO - need better ways to set/change these
+    long pollTime = 50;  //TODO - need better ways to set/change these
 
     public Reporter getReporter() {
         return reporter;
@@ -43,11 +41,11 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
 
     Step setupStep() {
         return new Step("Launching new " + getDeviceName() + " instance",
-                "New " + getDriverName() + " successfully starts");
+                "New " + getDriverName() + " starts");
     }
 
     void passStep(Step step) {
-        step.setPassed(getDriverName() + " successfully started");
+        step.setPassed(getDriverName() + " started");
         if (reporter.getDriver() == null) {
             reporter = new Reporter(remoteWebDriver);
         }
@@ -119,7 +117,7 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
     @Override
     public void get(String url) {
         Step step = new Step("Loading URL of '" + url + "'",
-                "Expected URL of '" + url + "' to load");
+                "Expected URL to load");
         try {
             getDriver().get(url);
             step.setActual("Loaded URL of '" + getCurrentUrl() + "'");
@@ -167,13 +165,13 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
         if (!isElementPresent(by)) {
             // if it's not present, wait, and log that wait
             Step step = new Step("Waiting for element '" + by + "' to be present",
-                    "Element '" + by + "' is present");
+                    "Element is present");
             try {
                 WebDriverWait wait = new WebDriverWait(getDriver(), waitTime, pollTime);
                 wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
-                step.setPassed("Waited '" + step.getTime() + "' milliseconds for element '" + by + "' to be present");
+                step.setPassed("Waited '" + step.getTime() + "' milliseconds for element to be present");
             } catch (TimeoutException e) {
-                step.setFailed("After waiting '" + waitTime + "' seconds, element '" + by + "' is not present");
+                step.setFailed("After waiting '" + waitTime + "' seconds, element is not present");
             } finally {
                 getReporter().addStep(step);
             }
@@ -255,12 +253,12 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
     public void close() {
         String windowHandle = getWindowHandle();
         Step step = new Step("Closing current window with handle '" + windowHandle + "'",
-                "Window with handle '" + windowHandle + "' is no longer open");
+                "Window is no longer open");
         try {
             getDriver().close();
             step.setTime();
             if (getWindowHandles().contains(windowHandle)) {
-                step.setFailed("Window with handle '" + windowHandle + "' is still open");
+                step.setFailed("Window is still open");
             } else {
                 step.setPassed("Window successfully closed");
             }
@@ -280,10 +278,10 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
     @Override
     public void quit() {
         Step step = new Step("Destroying " + getDeviceName() + " instance",
-                getDriverName() + " successfully stops");
+                getDriverName() + " stops");
         try {
             getDriver().quit();
-            step.setPassed(getDriverName() + " successfully stopped");
+            step.setPassed(getDriverName() + " stopped");
         } catch (Exception e) {
             step.setFailed("Unable to destroy " + getDeviceName() + " instance: " + e);
         } finally {
@@ -319,5 +317,154 @@ public class RemoteWebDriver extends org.openqa.selenium.remote.RemoteWebDriver 
     public Options manage() {
         // not doing any logging, as this is just a check, nothing to log
         return new com.testpros.fast.RemoteWebDriverOptions(getDriver().manage(), getReporter());
+    }
+
+    /**
+     * Executes JavaScript in the context of the currently selected frame or window. The script
+     * fragment provided will be executed as the body of an anonymous function.
+     *
+     * <p>
+     * Within the script, use <code>document</code> to refer to the current document. Note that local
+     * variables will not be available once the script has finished executing, though global variables
+     * will persist.
+     *
+     * <p>
+     * If the script has a return value (i.e. if the script contains a <code>return</code> statement),
+     * then the following steps will be taken:
+     *
+     * <ul>
+     * <li>For an HTML element, this method returns a WebElement</li>
+     * <li>For a decimal, a Double is returned</li>
+     * <li>For a non-decimal number, a Long is returned</li>
+     * <li>For a boolean, a Boolean is returned</li>
+     * <li>For all other cases, a String is returned.</li>
+     * <li>For an array, return a List&lt;Object&gt; with each object following the rules above. We
+     * support nested lists.</li>
+     * <li>For a map, return a Map&lt;String, Object&gt; with values following the rules above.</li>
+     * <li>Unless the value is null or there is no return value, in which null is returned</li>
+     * </ul>
+     *
+     * <p>
+     * Arguments must be a number, a boolean, a String, WebElement, or a List of any combination of
+     * the above. An exception will be thrown if the arguments do not meet these criteria. The
+     * arguments will be made available to the JavaScript via the "arguments" magic variable, as if
+     * the function were called via "Function.apply"
+     *
+     * Additionally, this will log the activity into the FAST reporter. If any errors
+     * are encountered it is considered a failure, and the error will be recorded, otherwise it
+     * will be considered a pass.
+     * @param script The JavaScript to execute
+     * @param args   The arguments to the script. May be empty
+     * @return One of Boolean, Long, Double, String, List, Map or WebElement. Or null.
+     */
+    @Override
+    public Object executeScript(String script, Object... args) {
+        Step step = new Step("Executing script '" + script + "' with arguments: '" + args,
+                "Script completes");
+        try {
+            Object object = getDriver().executeScript(script, args);
+            step.setPassed("Script executed");
+            return object;
+        } catch (Exception e) {
+            step.setFailed("Unable to execute the script: " + e);
+        } finally {
+            reporter.addStep(step);
+        }
+        return null;
+    }
+
+    /**
+     * Execute an asynchronous piece of JavaScript in the context of the currently selected frame or
+     * window. Unlike executing {@link #executeScript(String, Object...) synchronous JavaScript},
+     * scripts executed with this method must explicitly signal they are finished by invoking the
+     * provided callback. This callback is always injected into the executed function as the last
+     * argument.
+     *
+     * <p>
+     * The first argument passed to the callback function will be used as the script's result. This
+     * value will be handled as follows:
+     *
+     * <ul>
+     * <li>For an HTML element, this method returns a WebElement</li>
+     * <li>For a number, a Long is returned</li>
+     * <li>For a boolean, a Boolean is returned</li>
+     * <li>For all other cases, a String is returned.</li>
+     * <li>For an array, return a List&lt;Object&gt; with each object following the rules above. We
+     * support nested lists.</li>
+     * <li>For a map, return a Map&lt;String, Object&gt; with values following the rules above.</li>
+     * <li>Unless the value is null or there is no return value, in which null is returned</li>
+     * </ul>
+     *
+     * <p>
+     * The default timeout for a script to be executed is 0ms. In most cases, including the examples
+     * below, one must set the script timeout
+     * {@link Timeouts#setScriptTimeout(long, TimeUnit)}  beforehand
+     * to a value sufficiently large enough.
+     *
+     *
+     * <p>
+     * Example #1: Performing a sleep in the browser under test. <pre>{@code
+     *   long start = System.currentTimeMillis();
+     *   ((JavascriptExecutor) driver).executeAsyncScript(
+     *       "window.setTimeout(arguments[arguments.length - 1], 500);");
+     *   System.out.println(
+     *       "Elapsed time: " + System.currentTimeMillis() - start);
+     * }</pre>
+     *
+     * <p>
+     * Example #2: Synchronizing a test with an AJAX application: <pre>{@code
+     *   WebElement composeButton = driver.findElement(By.id("compose-button"));
+     *   composeButton.click();
+     *   ((JavascriptExecutor) driver).executeAsyncScript(
+     *       "var callback = arguments[arguments.length - 1];" +
+     *       "mailClient.getComposeWindowWidget().onload(callback);");
+     *   driver.switchTo().frame("composeWidget");
+     *   driver.findElement(By.id("to")).sendKeys("bog@example.com");
+     * }</pre>
+     *
+     * <p>
+     * Example #3: Injecting a XMLHttpRequest and waiting for the result: <pre>{@code
+     *   Object response = ((JavascriptExecutor) driver).executeAsyncScript(
+     *       "var callback = arguments[arguments.length - 1];" +
+     *       "var xhr = new XMLHttpRequest();" +
+     *       "xhr.open('GET', '/resource/data.json', true);" +
+     *       "xhr.onreadystatechange = function() {" +
+     *       "  if (xhr.readyState == 4) {" +
+     *       "    callback(xhr.responseText);" +
+     *       "  }" +
+     *       "};" +
+     *       "xhr.send();");
+     *   JsonObject json = new JsonParser().parse((String) response);
+     *   assertEquals("cheese", json.get("food").getAsString());
+     * }</pre>
+     *
+     * <p>
+     * Script arguments must be a number, a boolean, a String, WebElement, or a List of any
+     * combination of the above. An exception will be thrown if the arguments do not meet these
+     * criteria. The arguments will be made available to the JavaScript via the "arguments"
+     * variable.
+     *
+     * Additionally, this will log the activity into the FAST reporter. If any errors
+     * are encountered it is considered a failure, and the error will be recorded, otherwise it
+     * will be considered a pass.
+     * @param script The JavaScript to execute.
+     * @param args   The arguments to the script. May be empty.
+     * @return One of Boolean, Long, String, List, Map, WebElement, or null.
+     * @see Timeouts#setScriptTimeout(long, TimeUnit)
+     */
+    @Override
+    public Object executeAsyncScript(String script, Object... args) {
+        Step step = new Step("Executing asynchronous script '" + script + "' with arguments: '" + args,
+                "Asynchronous script completes");
+        try {
+            Object object = getDriver().executeAsyncScript(script, args);
+            step.setPassed("Asynchronous script executed");
+            return object;
+        } catch (Exception e) {
+            step.setFailed("Unable to execute the asynchronous script: " + e);
+        } finally {
+            reporter.addStep(step);
+        }
+        return null;
     }
 }

@@ -1,12 +1,16 @@
 package integration;
 
+import com.testpros.fast.ChromeDriver;
 import com.testpros.fast.WebDriver;
 import com.testpros.fast.reporter.FailedStepException;
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import com.testpros.fast.reporter.Step.Status;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -18,6 +22,14 @@ public class RemoteWindowIT extends FastTestBase {
 
     private final Point screenPosition = new Point(100, 100);
     private final String pointPosition = "(100, 100)";
+
+    @Override
+    @BeforeMethod
+    public void setupDevice() {
+        WebDriverManager.chromedriver().forceCache().setup();
+        ChromeOptions chromeOptions = new ChromeOptions();
+        drivers.set(new ChromeDriver(chromeOptions));
+    }
 
     @Test
     public void setSizeTest() {
@@ -32,7 +44,7 @@ public class RemoteWindowIT extends FastTestBase {
         assertEquals(sizeStep.getNumber(), 2);
         assertNotEquals(sizeStep.getTime(), 0.0);
         assertEquals(sizeStep.getAction(), "Setting window size to '" + dimensionSize + "'");
-        assertEquals(sizeStep.getExpected(), "Window size successfully set to '" + dimensionSize + "'");
+        assertEquals(sizeStep.getExpected(), "Window size changed");
         assertEquals(sizeStep.getActual(), "Window resized to '" + dimensionSize + "'");
         assertEquals(sizeStep.getStatus(), Status.PASS);
         assertNull(sizeStep.getRequest());
@@ -41,7 +53,7 @@ public class RemoteWindowIT extends FastTestBase {
     }
 
     @Test(expectedExceptions = FailedStepException.class)
-    public void setSizeFailedTest() {
+    public void setSizeNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
 
@@ -53,7 +65,7 @@ public class RemoteWindowIT extends FastTestBase {
             assertEquals(sizeStep.getNumber(), 3);
             assertNotEquals(sizeStep.getTime(), 0.0);
             assertEquals(sizeStep.getAction(), "Setting window size to '" + dimensionSize + "'");
-            assertEquals(sizeStep.getExpected(), "Window size successfully set to '" + dimensionSize + "'");
+            assertEquals(sizeStep.getExpected(), "Window size changed");
             assertTrue(sizeStep.getActual().startsWith("Unable to resize the window: " +
                     "org.openqa.selenium.NoSuchSessionException: Session ID is null. Using WebDriver after calling quit()?"));
             assertEquals(sizeStep.getStatus(), Status.FAIL);
@@ -76,7 +88,7 @@ public class RemoteWindowIT extends FastTestBase {
         assertEquals(sizeStep.getNumber(), 2);
         assertNotEquals(sizeStep.getTime(), 0.0);
         assertEquals(sizeStep.getAction(), "Setting window position to '" + pointPosition + "'");
-        assertEquals(sizeStep.getExpected(), "Window position successfully changed to '" + pointPosition + "'");
+        assertEquals(sizeStep.getExpected(), "Window position changed");
         assertEquals(sizeStep.getActual(), "Window moved to '" + pointPosition + "'");
         assertEquals(sizeStep.getStatus(), Status.PASS);
         assertNull(sizeStep.getRequest());
@@ -85,7 +97,7 @@ public class RemoteWindowIT extends FastTestBase {
     }
 
     @Test(expectedExceptions = FailedStepException.class)
-    public void setPositionFailTest() {
+    public void setPositionNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
 
@@ -98,7 +110,7 @@ public class RemoteWindowIT extends FastTestBase {
         assertEquals(sizeStep.getNumber(), 3);
         assertNotEquals(sizeStep.getTime(), 0.0);
         assertEquals(sizeStep.getAction(), "Setting window position to '" + pointPosition + "'");
-        assertEquals(sizeStep.getExpected(), "Window position successfully changed to '" + pointPosition + "'");
+        assertEquals(sizeStep.getExpected(), "Window position changed");
         assertTrue(sizeStep.getActual().startsWith("Unable to moved the window: " +
                 "org.openqa.selenium.NoSuchSessionException: Session ID is null. Using WebDriver after calling quit()?"));
         assertEquals(sizeStep.getStatus(), Status.FAIL);
@@ -143,7 +155,7 @@ public class RemoteWindowIT extends FastTestBase {
         assertEquals(sizeStep.getNumber(), 2);
         assertNotEquals(sizeStep.getTime(), 0.0);
         assertEquals(sizeStep.getAction(), "Maximizing the window");
-        assertEquals(sizeStep.getExpected(), "Window successfully maximized");
+        assertEquals(sizeStep.getExpected(), "Window maximized");
         assertTrue(sizeStep.getActual().startsWith("Window maximized with new size of '"));
         assertEquals(sizeStep.getStatus(), Status.PASS);
         assertNull(sizeStep.getRequest());
@@ -152,7 +164,7 @@ public class RemoteWindowIT extends FastTestBase {
     }
 
     @Test(expectedExceptions = FailedStepException.class)
-    public void maximizeFailedTest() {
+    public void maximizeNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
 
@@ -164,7 +176,7 @@ public class RemoteWindowIT extends FastTestBase {
             assertEquals(sizeStep.getNumber(), 3);
             assertNotEquals(sizeStep.getTime(), 0.0);
             assertEquals(sizeStep.getAction(), "Maximizing the window");
-            assertEquals(sizeStep.getExpected(), "Window successfully maximized");
+            assertEquals(sizeStep.getExpected(), "Window maximized");
             assertTrue(sizeStep.getActual().startsWith("Unable to maximize the window: " +
                     "org.openqa.selenium.NoSuchSessionException: Session ID is null. Using WebDriver after calling quit()?"));
             assertEquals(sizeStep.getStatus(), Status.FAIL);
@@ -188,7 +200,7 @@ public class RemoteWindowIT extends FastTestBase {
         assertEquals(sizeStep.getNumber(), 2);
         assertNotEquals(sizeStep.getTime(), 0.0);
         assertEquals(sizeStep.getAction(), "Setting the window to fullscreen");
-        assertEquals(sizeStep.getExpected(), "Window successfully set to fullscreen");
+        assertEquals(sizeStep.getExpected(), "Window set to fullscreen");
         assertTrue(sizeStep.getActual().startsWith("Window at fullscreen with new size of '"));
         assertEquals(sizeStep.getStatus(), Status.PASS);
         assertNull(sizeStep.getRequest());
@@ -197,7 +209,7 @@ public class RemoteWindowIT extends FastTestBase {
     }
 
     @Test(expectedExceptions = FailedStepException.class)
-    public void fullscreenFailedTest() {
+    public void fullscreenNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
 
@@ -209,7 +221,7 @@ public class RemoteWindowIT extends FastTestBase {
             assertEquals(sizeStep.getNumber(), 3);
             assertNotEquals(sizeStep.getTime(), 0.0);
             assertEquals(sizeStep.getAction(), "Setting the window to fullscreen");
-            assertEquals(sizeStep.getExpected(), "Window successfully set to fullscreen");
+            assertEquals(sizeStep.getExpected(), "Window set to fullscreen");
             assertTrue(sizeStep.getActual().startsWith("Unable to set the window to fullscreen: " +
                     "org.openqa.selenium.NoSuchSessionException: Session ID is null. Using WebDriver after calling quit()?"));
             assertEquals(sizeStep.getStatus(), Status.FAIL);

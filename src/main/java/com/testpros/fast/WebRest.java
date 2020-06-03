@@ -166,7 +166,7 @@ public class WebRest {
     private CloseableHttpResponse httpMethod(HttpRequestBase httpMethod, String url) {
         String methodName = httpMethod.getMethod();
         Step step = new Step("Making '" + methodName + "' call to '" + url + "'",
-                "'" + methodName + "' call to '" + url + "' successfully made", restRequest);
+                "'" + methodName + "' call made", restRequest);
         try {
             CloseableHttpClient httpclient = HttpClients.createDefault();
             HttpClientContext context = HttpClientContext.create();
@@ -174,7 +174,7 @@ public class WebRest {
             CloseableHttpResponse response = httpclient.execute(httpMethod, context);
             copyOverCookies(context);
             httpclient.close();
-            step.setPassed("'" + methodName + "' call to '" + url + "' successfully returned");
+            step.setPassed("'" + methodName + "' call returned");
             step.setResponse(response);
             return response;
         } catch (Exception e) {

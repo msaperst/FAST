@@ -6,6 +6,7 @@ import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import com.testpros.fast.reporter.Step.Status;
 import org.openqa.selenium.Cookie;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.Set;
@@ -31,7 +32,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
         assertEquals(cookieStep.getNumber(), 3);
         assertNotEquals(cookieStep.getTime(), 0.0);
         assertEquals(cookieStep.getAction(), "Adding cookie '" + cookieString + "' to browser session");
-        assertEquals(cookieStep.getExpected(), "Cookie '" + cookieString + "' successfully added");
+        assertEquals(cookieStep.getExpected(), "Cookie added");
         assertEquals(cookieStep.getActual(), "Successfully added cookie to browser session");
         assertEquals(cookieStep.getStatus(), Status.PASS);
         assertNull(cookieStep.getRequest());
@@ -40,7 +41,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
     }
 
     @Test(expectedExceptions = FailedStepException.class)
-    public void addCookieFailedTest() {
+    public void addCookieNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
 
@@ -51,7 +52,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
             assertEquals(cookieStep.getNumber(), 2);
             assertNotEquals(cookieStep.getTime(), 0.0);
             assertEquals(cookieStep.getAction(), "Adding cookie '" + cookieString + "' to browser session");
-            assertEquals(cookieStep.getExpected(), "Cookie '" + cookieString + "' successfully added");
+            assertEquals(cookieStep.getExpected(), "Cookie added");
             assertTrue(cookieStep.getActual().startsWith("Unable to add cookie to browser session: org.openqa.selenium." +
                     "InvalidCookieDomainException: invalid cookie domain\n  (Session info: "));
             assertEquals(cookieStep.getStatus(), Status.FAIL);
@@ -76,7 +77,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
         assertEquals(cookieStep.getNumber(), 4);
         assertNotEquals(cookieStep.getTime(), 0.0);
         assertEquals(cookieStep.getAction(), "Removing cookie named 'foo' from browser session");
-        assertEquals(cookieStep.getExpected(), "Cookie named 'foo' successfully deleted");
+        assertEquals(cookieStep.getExpected(), "Cookie deleted");
         assertEquals(cookieStep.getActual(), "Successfully removed cookie from browser session");
         assertEquals(cookieStep.getStatus(), Status.PASS);
         assertNull(cookieStep.getRequest());
@@ -85,7 +86,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
     }
 
     @Test(expectedExceptions = FailedStepException.class)
-    public void deleteCookieNamedFailedTest() {
+    public void deleteCookieNamedNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
 
@@ -97,7 +98,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
             assertEquals(cookieStep.getNumber(), 3);
             assertNotEquals(cookieStep.getTime(), 0.0);
             assertEquals(cookieStep.getAction(), "Removing cookie named 'foo' from browser session");
-            assertEquals(cookieStep.getExpected(), "Cookie named 'foo' successfully deleted");
+            assertEquals(cookieStep.getExpected(), "Cookie deleted");
             assertTrue(cookieStep.getActual().startsWith("Unable to delete cookie from browser session: " +
                     "org.openqa.selenium.NoSuchSessionException: Session ID is null. Using WebDriver after calling quit()?"));
             assertEquals(cookieStep.getStatus(), Status.FAIL);
@@ -122,7 +123,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
         assertEquals(cookieStep.getNumber(), 4);
         assertNotEquals(cookieStep.getTime(), 0.0);
         assertEquals(cookieStep.getAction(), "Removing cookie '" + cookieString + "' from browser session");
-        assertEquals(cookieStep.getExpected(), "Cookie '" + cookieString + "' successfully deleted");
+        assertEquals(cookieStep.getExpected(), "Cookie deleted");
         assertEquals(cookieStep.getActual(), "Successfully removed cookie from browser session");
         assertEquals(cookieStep.getStatus(), Status.PASS);
         assertNull(cookieStep.getRequest());
@@ -131,7 +132,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
     }
 
     @Test(expectedExceptions = FailedStepException.class)
-    public void deleteCookieFailedTest() {
+    public void deleteCookieNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
 
@@ -143,7 +144,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
             assertEquals(cookieStep.getNumber(), 3);
             assertNotEquals(cookieStep.getTime(), 0.0);
             assertEquals(cookieStep.getAction(), "Removing cookie '" + cookieString + "' from browser session");
-            assertEquals(cookieStep.getExpected(), "Cookie '" + cookieString + "' successfully deleted");
+            assertEquals(cookieStep.getExpected(), "Cookie deleted");
             assertTrue(cookieStep.getActual().startsWith("Unable to delete cookie from browser session: " +
                     "org.openqa.selenium.NoSuchSessionException: Session ID is null. Using WebDriver after calling quit()?"));
             assertEquals(cookieStep.getStatus(), Status.FAIL);
@@ -168,7 +169,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
         assertEquals(cookieStep.getNumber(), 4);
         assertNotEquals(cookieStep.getTime(), 0.0);
         assertEquals(cookieStep.getAction(), "Removing all cookies from browser session");
-        assertEquals(cookieStep.getExpected(), "All cookies successfully deleted");
+        assertEquals(cookieStep.getExpected(), "All cookies deleted");
         assertEquals(cookieStep.getActual(), "Successfully removed all cookies from browser session");
         assertEquals(cookieStep.getStatus(), Status.PASS);
         assertNull(cookieStep.getRequest());
@@ -177,7 +178,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
     }
 
     @Test(expectedExceptions = FailedStepException.class)
-    public void deleteAllCookiesFailedTest() {
+    public void deleteAllCookiesNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
 
@@ -189,7 +190,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
             assertEquals(cookieStep.getNumber(), 3);
             assertNotEquals(cookieStep.getTime(), 0.0);
             assertEquals(cookieStep.getAction(), "Removing all cookies from browser session");
-            assertEquals(cookieStep.getExpected(), "All cookies successfully deleted");
+            assertEquals(cookieStep.getExpected(), "All cookies deleted");
             assertTrue(cookieStep.getActual().startsWith("Unable to delete all cookies from browser session: " +
                     "org.openqa.selenium.NoSuchSessionException: Session ID is null. Using WebDriver after calling quit()?"));
             assertEquals(cookieStep.getStatus(), Status.FAIL);
@@ -225,11 +226,6 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
         assertEquals(driver.manage().getCookieNamed("foo"), cookie);
         //assert reporter doesn't show getter information
         assertEquals(reporter.getSteps().size(), 3);
-    }
-
-    @Test
-    public void timeoutsTest() {
-        //TODO
     }
 
     @Test

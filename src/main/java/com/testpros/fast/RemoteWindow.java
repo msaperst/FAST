@@ -28,7 +28,7 @@ public class RemoteWindow implements Window {
     @Override
     public void setSize(Dimension targetSize) {
         Step step = new Step("Setting window size to '" + targetSize + "'",
-                "Window size successfully set to '" + targetSize + "'");
+                "Window size changed");
         try {
             window.setSize(targetSize);
             step.setActual("Window resized to '" + getSize() + "'");
@@ -56,7 +56,7 @@ public class RemoteWindow implements Window {
     @Override
     public void setPosition(Point targetPosition) {
         Step step = new Step("Setting window position to '" + targetPosition + "'",
-                "Window position successfully changed to '" + targetPosition + "'");
+                "Window position changed");
         try {
             window.setPosition(targetPosition);
             step.setActual("Window moved to '" + getPosition() + "'");
@@ -104,7 +104,7 @@ public class RemoteWindow implements Window {
     @Override
     public void maximize() {
         Step step = new Step("Maximizing the window",
-                "Window successfully maximized");
+                "Window maximized");
         try {
             window.maximize();
             step.setPassed("Window maximized with new size of '" + getSize() + "'");
@@ -124,7 +124,7 @@ public class RemoteWindow implements Window {
     @Override
     public void fullscreen() {
         Step step = new Step("Setting the window to fullscreen",
-                "Window successfully set to fullscreen");
+                "Window set to fullscreen");
         try {
             window.fullscreen();
             step.setPassed("Window at fullscreen with new size of '" + getSize() + "'");

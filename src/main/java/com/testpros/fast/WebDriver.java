@@ -10,4 +10,8 @@ public interface WebDriver extends org.openqa.selenium.WebDriver {
     List<WebElement> findElements(By by);
 
     WebElement findElement(By by);
+
+    boolean isElementPresent(By by);
+
+    void waitForElementPresent(By by);
 }

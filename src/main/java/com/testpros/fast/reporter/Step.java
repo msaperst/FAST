@@ -14,7 +14,8 @@ public class Step {
     private final long startTime;
     private int number;
     private String actual;
-    private String screenshot;
+    private String screenshot;  //TODO - should expand on this; ideally would have a before and an after,
+                                    // either of element of whole screen if no element
     private RestRequest request;
     private CloseableHttpResponse response;
     private double time;

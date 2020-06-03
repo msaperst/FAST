@@ -34,7 +34,7 @@ public class RemoteWebDriverOptions implements Options {
     @Override
     public void addCookie(Cookie cookie) {
         Step step = new Step("Adding cookie '" + cookie + "' to browser session",
-                "Cookie '" + cookie + "' successfully added");
+                "Cookie added");
         try {
             options.addCookie(cookie);
             step.setTime();
@@ -62,7 +62,7 @@ public class RemoteWebDriverOptions implements Options {
     @Override
     public void deleteCookieNamed(String name) {
         Step step = new Step("Removing cookie named '" + name + "' from browser session",
-                "Cookie named '" + name + "' successfully deleted");
+                "Cookie deleted");
         try {
             options.deleteCookieNamed(name);
             step.setTime();
@@ -89,7 +89,7 @@ public class RemoteWebDriverOptions implements Options {
     @Override
     public void deleteCookie(Cookie cookie) {
         Step step = new Step("Removing cookie '" + cookie + "' from browser session",
-                "Cookie '" + cookie + "' successfully deleted");
+                "Cookie deleted");
         try {
             options.deleteCookie(cookie);
             step.setTime();
@@ -113,7 +113,7 @@ public class RemoteWebDriverOptions implements Options {
     @Override
     public void deleteAllCookies() {
         Step step = new Step("Removing all cookies from browser session",
-                "All cookies successfully deleted");
+                "All cookies deleted");
         try {
             options.deleteAllCookies();
             step.setTime();
@@ -158,8 +158,8 @@ public class RemoteWebDriverOptions implements Options {
      */
     @Override
     public Timeouts timeouts() {
-        //TODO
-        return options.timeouts();
+        // not doing any logging, as this is just a check, nothing to log
+        return new RemoteTimeouts(options.timeouts(), reporter);
     }
 
     /**
@@ -167,8 +167,8 @@ public class RemoteWebDriverOptions implements Options {
      */
     @Override
     public ImeHandler ime() {
-        //TODO
-        return options.ime();
+        // not doing any logging, as this is just a check, nothing to log
+        return new RemoteInputMethodManager(options.ime(), reporter);
     }
 
     /**
@@ -189,7 +189,7 @@ public class RemoteWebDriverOptions implements Options {
      */
     @Override
     public Logs logs() {
-        //TODO
+        // not doing any logging, as this is just a check, nothing to log
         return options.logs();
     }
 }

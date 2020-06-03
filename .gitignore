@@ -8,6 +8,9 @@
 # Target directory
 target/
 
+# Documents
+docs/
+
 # Log file
 *.log
 
