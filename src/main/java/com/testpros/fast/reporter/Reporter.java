@@ -28,10 +28,13 @@ public class Reporter {
 
     public void addStep(Step step, boolean screenshot) {
         step.setNumber(steps.size() + 1);
-        if (screenshot && driver != null) {
-            step.takeScreenshot(driver);
+        try {
+            if (screenshot) {
+                step.takeScreenshot(driver);
+            }
+        } finally {
+            steps.add(step);
         }
-        steps.add(step);
         if (step.getStatus() == Status.FAIL) {
             throw new FailedStepException("Expected to " + step.getExpected() + ", instead " + step.getActual());
         }

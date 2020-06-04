@@ -39,6 +39,9 @@ the additional logging and traceability from FAST.
 Interested in using an entire framework built around FAST? 
 Checkout ... (coming soon)
 
+## Reports
+// TODO
+
 ## Examples
 
 ### Simple Test
@@ -180,7 +183,13 @@ test case name could be recorded in the reporter.
 - waits
   - custom - still need negatives
   - built ins (now autowaits for element present, still needs to wait for custom actions (e.g. editable for sendKeys))
+    - discuss, do we want these or not?
 - JavaDocs
 - More tracability
   - All-Screen screenshot
   - recording... 
+- Alert
+- Action
+- ???
+####NOTE
+Only use 'success' in step actual - AND ONLY IF CHECK IS PERFORMED - otherwise state fact

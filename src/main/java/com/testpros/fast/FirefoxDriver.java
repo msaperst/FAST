@@ -11,7 +11,7 @@ public class FirefoxDriver extends RemoteWebDriver {
     public FirefoxDriver() {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver();
+            seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver();
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -24,7 +24,7 @@ public class FirefoxDriver extends RemoteWebDriver {
     public FirefoxDriver(Capabilities capabilities) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(capabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(capabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -37,7 +37,7 @@ public class FirefoxDriver extends RemoteWebDriver {
     public FirefoxDriver(GeckoDriverService service, Capabilities desiredCapabilities) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service, desiredCapabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service, desiredCapabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -49,7 +49,7 @@ public class FirefoxDriver extends RemoteWebDriver {
     public FirefoxDriver(FirefoxOptions options) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(options);
+            seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(options);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -61,7 +61,7 @@ public class FirefoxDriver extends RemoteWebDriver {
     public FirefoxDriver(GeckoDriverService service) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service);
+            seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -73,7 +73,7 @@ public class FirefoxDriver extends RemoteWebDriver {
     public FirefoxDriver(XpiDriverService service) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service);
+            seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -85,7 +85,7 @@ public class FirefoxDriver extends RemoteWebDriver {
     public FirefoxDriver(GeckoDriverService service, FirefoxOptions options) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service, options);
+            seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service, options);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -97,7 +97,7 @@ public class FirefoxDriver extends RemoteWebDriver {
     public FirefoxDriver(XpiDriverService service, FirefoxOptions options) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service, options);
+            seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service, options);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);

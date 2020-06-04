@@ -10,7 +10,7 @@ public class InternetExplorerDriver extends RemoteWebDriver {
     public InternetExplorerDriver() {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver();
+            seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver();
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -23,7 +23,7 @@ public class InternetExplorerDriver extends RemoteWebDriver {
     public InternetExplorerDriver(Capabilities capabilities) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(capabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(capabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -35,7 +35,7 @@ public class InternetExplorerDriver extends RemoteWebDriver {
     public InternetExplorerDriver(InternetExplorerOptions options) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(options);
+            seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(options);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -48,7 +48,7 @@ public class InternetExplorerDriver extends RemoteWebDriver {
     public InternetExplorerDriver(int port) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(port);
+            seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(port);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -60,7 +60,7 @@ public class InternetExplorerDriver extends RemoteWebDriver {
     public InternetExplorerDriver(InternetExplorerDriverService service) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service);
+            seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -73,7 +73,7 @@ public class InternetExplorerDriver extends RemoteWebDriver {
     public InternetExplorerDriver(InternetExplorerDriverService service, Capabilities capabilities) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service, capabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service, capabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -85,7 +85,7 @@ public class InternetExplorerDriver extends RemoteWebDriver {
     public InternetExplorerDriver(InternetExplorerDriverService service, InternetExplorerOptions options) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service, options);
+            seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service, options);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -98,7 +98,7 @@ public class InternetExplorerDriver extends RemoteWebDriver {
     public InternetExplorerDriver(InternetExplorerDriverService service, Capabilities capabilities, int port) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service, capabilities, port);
+            seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service, capabilities, port);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);

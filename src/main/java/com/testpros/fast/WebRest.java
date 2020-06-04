@@ -3,7 +3,6 @@ package com.testpros.fast;
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.RestRequest;
 import com.testpros.fast.reporter.Step;
-import com.testpros.fast.reporter.Step.Status;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -58,28 +57,6 @@ public class WebRest {
             request.setHeader(headerParam.getName(), headerParam.getValue());
         }
     }
-
-//    private String getRequestOutput() {
-//        StringBuilder sb = new StringBuilder();
-//        if (usernamePasswordCredentials != null) {
-//            sb.append("\n    Credentials:").
-//                    append("\n        Username: " + usernamePasswordCredentials.getUserName()).
-//                    append("\n        Password: " + usernamePasswordCredentials.getPassword());
-//        }
-//        if (headerParams.size() > 0) {
-//            sb.append("\n    Headers:");
-//        }
-//        for (NameValuePair headerParam : headerParams) {
-//            sb.append("\n        ").append(headerParam.getName()).append(" : ").append(headerParam.getValue());
-//        }
-//        return sb.toString();
-//    }
-//
-//    private String getResponseOutput(CloseableHttpResponse response) {
-//        return "\n    Headers: " + response.getAllHeaders().toString() +
-//                "\n    Status Code: " + response.getStatusLine().getStatusCode() +
-//                "\n    Raw Response: " + response.getEntity().toString();
-//    }
 
     private void copyOverCookies(HttpClientContext context) {
         CookieStore cookieStore = context.getCookieStore();
@@ -166,15 +143,13 @@ public class WebRest {
     private CloseableHttpResponse httpMethod(HttpRequestBase httpMethod, String url) {
         String methodName = httpMethod.getMethod();
         Step step = new Step("Making '" + methodName + "' call to '" + url + "'",
-                "'" + methodName + "' call to '" + url + "' successfully made", restRequest);
-        try {
-            CloseableHttpClient httpclient = HttpClients.createDefault();
+                "'" + methodName + "' call made", restRequest);
+        try(CloseableHttpClient httpclient = HttpClients.createDefault()) {
             HttpClientContext context = HttpClientContext.create();
             setupCall(httpMethod);
             CloseableHttpResponse response = httpclient.execute(httpMethod, context);
             copyOverCookies(context);
-            httpclient.close();
-            step.setPassed("'" + methodName + "' call to '" + url + "' successfully returned");
+            step.setPassed("'" + methodName + "' call returned");
             step.setResponse(response);
             return response;
         } catch (Exception e) {

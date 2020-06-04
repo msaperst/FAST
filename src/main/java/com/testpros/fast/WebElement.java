@@ -15,8 +15,12 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import static com.testpros.fast.utilities.Constants.*;
+
 public class WebElement implements org.openqa.selenium.WebElement {
 
+    public static final String WAITED = "Waited '";
+    public static final String AFTER_WAITING = "After waiting '";
     RemoteWebDriver driver;
     org.openqa.selenium.WebElement element;
     String elementName;
@@ -26,14 +30,14 @@ public class WebElement implements org.openqa.selenium.WebElement {
     // TODO - JavaDoc
     protected WebElement(RemoteWebDriver driver, org.openqa.selenium.WebElement element, int match) {
         this.driver = driver;
-        this.elementName = element.toString().split("->")[1].replaceFirst("(?s)(.*)\\]", "$1" + "") + " [" + match + "]";
+        this.elementName = (element.toString().split("->")[1].replaceFirst("(?s)(.*)\\]", "$1" + "") + " [" + match + "]").trim();
         this.reporter = driver.getReporter();
     }
 
     // TODO - JavaDoc
     protected WebElement(RemoteWebDriver driver, By by) {
         this.driver = driver;
-        this.elementName = by.toString();   //TODO - clean this up some
+        this.elementName = by.toString().trim();   //TODO - clean this up some
         this.reporter = driver.getReporter();
         // before we do anything, ensure the element present, and wait for it if needed
         driver.waitForElementPresent(by);
@@ -53,6 +57,7 @@ public class WebElement implements org.openqa.selenium.WebElement {
             byte[] fileContent = FileUtils.readFileToByteArray(fullPageScreenshot);
             screenshot = Base64.getEncoder().encodeToString(fileContent);
         } catch (IOException e) {
+            //TODO - properly handle this error
             e.printStackTrace();
         }
     }
@@ -78,10 +83,10 @@ public class WebElement implements org.openqa.selenium.WebElement {
      */
     public void click() {
         Step step = new Step("Clicking on element '" + this.elementName + "'",
-                "Element '" + this.elementName + "' is present and visible and clicked");
+                "Element is present and visible and clicked");
         try {
             this.element.click();
-            step.setPassed("Successfully clicked on element '" + this.elementName + "'");
+            step.setPassed("Clicked on element");
         } catch (Exception e) {
             step.setFailed("Unable to click on element: " + e);
         } finally {
@@ -101,10 +106,10 @@ public class WebElement implements org.openqa.selenium.WebElement {
      */
     public void submit() {
         Step step = new Step("Submitting element '" + this.elementName + "'",
-                "Element '" + this.elementName + "' is present and visible and submitted");
+                "Element is present and visible and submitted");
         try {
             this.element.submit();
-            step.setPassed("Successfully submitted element '" + this.elementName + "'");
+            step.setPassed("Submitted element");
         } catch (Exception e) {
             step.setFailed("Unable to submit element: " + e);
         } finally {
@@ -124,12 +129,10 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public void sendKeys(CharSequence... keysToSend) {
         String charsSent = String.join("', '", keysToSend);
         Step step = new Step("Sending keys '" + charsSent + "' to element '" + this.elementName + "'",
-                "Element '" + this.elementName + "' is present, visible, an input, and enabled and had keys '" +
-                        charsSent + "' sent to it");
+                "Element is present, visible, an input, and enabled and had keys sent to it");
         try {
             this.element.sendKeys(keysToSend);
-            step.setPassed("Successfully sent keys '" + charsSent +
-                    "' to element '" + this.elementName + "'");
+            step.setPassed("Sent keys to element");
         } catch (Exception e) {
             step.setFailed("Unable to send keys: " + e);
         } finally {
@@ -151,14 +154,14 @@ public class WebElement implements org.openqa.selenium.WebElement {
      */
     public void clear() {
         Step step = new Step("Clearing all input from element '" + this.elementName + "'",
-                "Element '" + this.elementName + "' doesn't contain any input");
+                "Element doesn't contain any input");
         try {
             this.element.clear();
             step.setTime();
             if (!"".equals(getAttribute("value"))) {
-                step.setFailed("Did not clear content from element '" + this.elementName + "'");
+                step.setFailed("Failed to clear content from element");
             } else {
-                step.setPassed("Successfully cleared content from element '" + this.elementName + "'");
+                step.setPassed("Successfully cleared content from element");
             }
         } catch (Exception e) {
             step.setFailed("Unable to clear element content: " + e);
@@ -235,14 +238,14 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public void waitForSelected() {
         if (!isSelected()) {
             // if it's not displayed, wait, and log that wait
-            Step step = new Step("Waiting for element '" + elementName + "' to be selected",
-                    "Element '" + elementName + "' is selected");
+            Step step = new Step(WAITING_FOR_ELEMENT + elementName + "' to be selected",
+                    "Element is selected");
             try {
                 WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
                 wait.until((ExpectedCondition<Boolean>) d -> isSelected());
-                step.setPassed("Waited '" + step.getTime() + "' milliseconds for element '" + elementName + "' to be selected");
+                step.setPassed(WAITED + step.getTime() + "' milliseconds for element to be selected");
             } catch (TimeoutException e) {
-                step.setFailed("After waiting '" + driver.waitTime + "' seconds, element '" + elementName + "' is not selected");
+                step.setFailed(AFTER_WAITING + driver.waitTime + "' seconds, element is not selected");
             } finally {
                 reporter.addStep(step);
             }
@@ -264,14 +267,14 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public void waitForEnabled() {
         if (!isEnabled()) {
             // if it's not displayed, wait, and log that wait
-            Step step = new Step("Waiting for element '" + elementName + "' to be enabled",
-                    "Element '" + elementName + "' is enabled");
+            Step step = new Step(WAITING_FOR_ELEMENT + elementName + "' to be enabled",
+                    "Element is enabled");
             try {
                 WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
                 wait.until((ExpectedCondition<Boolean>) d -> isEnabled());
-                step.setPassed("Waited '" + step.getTime() + "' milliseconds for element '" + elementName + "' to be enabled");
+                step.setPassed(WAITED + step.getTime() + "' milliseconds for element to be enabled");
             } catch (TimeoutException e) {
-                step.setFailed("After waiting '" + driver.waitTime + "' seconds, element '" + elementName + "' is not enabled");
+                step.setFailed(AFTER_WAITING + driver.waitTime + "' seconds, element is not enabled");
             } finally {
                 reporter.addStep(step);
             }
@@ -320,10 +323,10 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public List<WebElement> findElements(By by) {
         // not doing any logging, as this is just a check, nothing to log
         List<WebElement> webElements = new ArrayList<>();
-        List<org.openqa.selenium.WebElement> elements = this.element.findElements(by);
+        List<org.openqa.selenium.WebElement> seleniumWebElements = this.element.findElements(by);
         int counter = 1;
-        for (org.openqa.selenium.WebElement element : elements) {
-            webElements.add(new WebElement(driver, element, counter));
+        for (org.openqa.selenium.WebElement seleniumWebElement : seleniumWebElements) {
+            webElements.add(new WebElement(driver, seleniumWebElement, counter));
             counter++;
         }
         return webElements;
@@ -354,14 +357,14 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public void waitForDisplayed() {
         if (!isDisplayed()) {
             // if it's not displayed, wait, and log that wait
-            Step step = new Step("Waiting for element '" + elementName + "' to be displayed",
-                    "Element '" + elementName + "' is displayed");
+            Step step = new Step(WAITING_FOR_ELEMENT + elementName + "' to be displayed",
+                    "Element is displayed");
             try {
                 WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
                 wait.until((ExpectedCondition<Boolean>) d -> isDisplayed());
-                step.setPassed("Waited '" + step.getTime() + "' milliseconds for element '" + elementName + "' to be displayed");
+                step.setPassed(WAITED + step.getTime() + "' milliseconds for element to be displayed");
             } catch (TimeoutException e) {
-                step.setFailed("After waiting '" + driver.waitTime + "' seconds, element '" + elementName + "' is not displayed");
+                step.setFailed(AFTER_WAITING + driver.waitTime + "' seconds, element is not displayed");
             } finally {
                 reporter.addStep(step);
             }
@@ -391,5 +394,13 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public <X> X getScreenshotAs(OutputType<X> outputType) {
         // not doing any logging, as this is just a check, nothing to log
         return this.element.getScreenshotAs(outputType);
+    }
+
+    public org.openqa.selenium.WebElement getWebElement() {
+        return this.element;
+    }
+
+    String getElementName() {
+        return this.elementName;
     }
 }
