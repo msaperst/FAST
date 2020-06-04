@@ -1,0 +1,40 @@
+<html>
+<head>
+    <script type="text/javascript">
+        window.onload = function() {
+            var alertButton = document.getElementById("alertButton");
+            var confirmButton = document.getElementById("confirmButton");
+            var promptButton = document.getElementById("promptButton");
+            var popupResponse = document.getElementById("popupResponse");
+
+            alertButton.addEventListener('click', function(event) {
+                alert('I am an alert!');
+            });
+
+            confirmButton.addEventListener('click', function(event) {
+                var answer = confirm('Is this not great?');
+                if (answer == true) {
+                    popupResponse.innerHTML = "You pressed OK!";
+                } else {
+                    popupResponse.innerHTML = "You pressed Cancel!";
+                }
+            });
+
+            promptButton.addEventListener('click', function(event) {
+                var text = prompt('What do you think?');
+                if( text !== null ) {
+                    popupResponse.innerHTML = "You entered text '" + text + "'";
+                } else {
+                    popupResponse.innerHTML = "You pressed Cancel!";
+                }
+            });
+        };
+    </script>
+</head>
+<body>
+<input name="alertButton" id="alertButton" type="button" value="Alert"/>
+<input name="confirmButton" id="confirmButton" type="button" value="Confirm"/>
+<input name="promptButton" id="promptButton" type="button" value="Prompt"/>
+<div id="popupResponse"></div>
+</body>
+</html>

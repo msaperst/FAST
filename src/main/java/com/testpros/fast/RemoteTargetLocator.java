@@ -200,7 +200,7 @@ public class RemoteTargetLocator implements TargetLocator {
         try {
             org.openqa.selenium.WebElement activeElement = targetLocator.activeElement();
             WebElement webElement = new WebElement(driver, activeElement, 1);
-            step.setPassed("Switched to active element '" + webElement.getElementName());
+            step.setPassed("Switched to active element '" + webElement.getElementName() + "'");
             return webElement;
         } catch (Exception e) {
             step.setFailed("Unable to switch to active element: " + e);
@@ -221,10 +221,10 @@ public class RemoteTargetLocator implements TargetLocator {
     @Override
     public Alert alert() {
         Step step = new Step("Switching to active modal dialog",
-                "Active element selected");
+                "Active modal dialog selected");
         try {
             Alert alert = targetLocator.alert();
-            step.setPassed("Switched to active modal dialog '" + alert);
+            step.setPassed("Switched to active modal dialog with text '" + alert.getText() + "'");
             return alert;
         } catch (Exception e) {
             step.setFailed("Unable to switch to active modal dialog: " + e);

@@ -1,6 +1,7 @@
 package com.testpros.fast.reporter;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -117,10 +118,28 @@ public class Step {
     }
 
     public void takeScreenshot(WebDriver driver) {
-        screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
+        if( !isActiveModalDialog(driver)) {
+            screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
+        } else {
+            //TODO - need a screenshot with alert
+        }
     }
 
     public enum Status {
         PASS, FAIL, CHECK
+    }
+
+    /**
+     * Determines if any popup is present on the page
+     *
+     * @return Boolean: is a popup present on the page
+     */
+    private boolean isActiveModalDialog(WebDriver driver) {
+        try {
+            driver.switchTo().alert();
+            return true;
+        } catch (NoAlertPresentException e) {
+            return false;
+        }
     }
 }

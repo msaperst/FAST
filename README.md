@@ -188,5 +188,8 @@ test case name could be recorded in the reporter.
 - More tracability
   - All-Screen screenshot
   - recording... 
+- Alert
+- Action
+- ???
 ####NOTE
 Only use 'success' in step actual - AND ONLY IF CHECK IS PERFORMED - otherwise state fact

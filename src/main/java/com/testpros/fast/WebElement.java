@@ -26,14 +26,14 @@ public class WebElement implements org.openqa.selenium.WebElement {
     // TODO - JavaDoc
     protected WebElement(RemoteWebDriver driver, org.openqa.selenium.WebElement element, int match) {
         this.driver = driver;
-        this.elementName = element.toString().split("->")[1].replaceFirst("(?s)(.*)\\]", "$1" + "") + " [" + match + "]";
+        this.elementName = (element.toString().split("->")[1].replaceFirst("(?s)(.*)\\]", "$1" + "") + " [" + match + "]").trim();
         this.reporter = driver.getReporter();
     }
 
     // TODO - JavaDoc
     protected WebElement(RemoteWebDriver driver, By by) {
         this.driver = driver;
-        this.elementName = by.toString();   //TODO - clean this up some
+        this.elementName = by.toString().trim();   //TODO - clean this up some
         this.reporter = driver.getReporter();
         // before we do anything, ensure the element present, and wait for it if needed
         driver.waitForElementPresent(by);

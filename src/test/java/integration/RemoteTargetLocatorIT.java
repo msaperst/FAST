@@ -5,6 +5,8 @@ import com.testpros.fast.WebDriver;
 import com.testpros.fast.reporter.FailedStepException;
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
+import com.testpros.fast.reporter.Step.Status;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import sample.Property;
@@ -18,6 +20,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
     String maxURL = Property.class.getClassLoader().getResource("pages/max.html").toString().replace(":/", ":///");
     String iFrameURL = Property.class.getClassLoader().getResource("pages/iframe.html").toString().replace(":/", ":///");
     String framesURL = Property.class.getClassLoader().getResource("pages/frames.html").toString().replace(":/", ":///");
+    String alertsURL = Property.class.getClassLoader().getResource("pages/alerts.html").toString().replace(":/", ":///");
 
     @Test
     public void frameIndexTest() {
@@ -40,7 +43,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         assertEquals(step.getAction(), "Switching to frame with index '0'");
         assertEquals(step.getExpected(), "Frame selected");
         assertEquals(step.getActual(), "Switched to frame");
-        assertEquals(step.getStatus(), Step.Status.PASS);
+        assertEquals(step.getStatus(), Status.PASS);
         assertNull(step.getRequest());
         assertNull(step.getResponse());
         assertNotNull(step.getScreenshot());
@@ -62,7 +65,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
             assertEquals(step.getExpected(), "Frame selected");
             assertTrue(step.getActual().startsWith("Unable to switch to frame: " +
                     "org.openqa.selenium.NoSuchFrameException: no such frame"));
-            assertEquals(step.getStatus(), Step.Status.FAIL);
+            assertEquals(step.getStatus(), Status.FAIL);
             assertNull(step.getRequest());
             assertNull(step.getResponse());
             assertNotNull(step.getScreenshot());
@@ -76,21 +79,21 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         
         driver.get(iFrameURL);
         assertFalse(driver.isElementPresent(By.id("name")));
-        driver.switchTo().frame("frame-1");
+        driver.switchTo().frame("frame1");
         //assert we've properly switched
         assertTrue(driver.isElementPresent(By.id("name")));
         driver.switchTo().parentFrame();
-        driver.switchTo().frame("frame-2");
+        driver.switchTo().frame("frame2");
         //assert we've properly switched
         assertFalse(driver.isElementPresent(By.id("name")));
         //assert reporter has proper information on switch
         Step step = reporter.getSteps().get(2);
         assertEquals(step.getNumber(), 3);
         assertNotEquals(step.getTime(), 0.0);
-        assertEquals(step.getAction(), "Switching to frame with name or id 'frame-1'");
+        assertEquals(step.getAction(), "Switching to frame with name or id 'frame1'");
         assertEquals(step.getExpected(), "Frame selected");
         assertEquals(step.getActual(), "Switched to frame");
-        assertEquals(step.getStatus(), Step.Status.PASS);
+        assertEquals(step.getStatus(), Status.PASS);
         assertNull(step.getRequest());
         assertNull(step.getResponse());
         assertNotNull(step.getScreenshot());
@@ -103,16 +106,16 @@ public class RemoteTargetLocatorIT extends FastTestBase {
 
         driver.get(iFrameURL);
         try {
-            driver.switchTo().frame("no-such-frame");
+            driver.switchTo().frame("noSuchFrame");
         } finally {
             Step step = reporter.getSteps().get(2);
             assertEquals(step.getNumber(), 3);
             assertNotEquals(step.getTime(), 0.0);
-            assertEquals(step.getAction(), "Switching to frame with name or id 'no-such-frame'");
+            assertEquals(step.getAction(), "Switching to frame with name or id 'noSuchFrame'");
             assertEquals(step.getExpected(), "Frame selected");
             assertTrue(step.getActual().startsWith("Unable to switch to frame: " +
-                    "org.openqa.selenium.NoSuchFrameException: No frame element found by name or id no-such-frame"));
-            assertEquals(step.getStatus(), Step.Status.FAIL);
+                    "org.openqa.selenium.NoSuchFrameException: No frame element found by name or id noSuchFrame"));
+            assertEquals(step.getStatus(), Status.FAIL);
             assertNull(step.getRequest());
             assertNull(step.getResponse());
             assertNotNull(step.getScreenshot());
@@ -126,21 +129,21 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         
         driver.get(iFrameURL);
         assertFalse(driver.isElementPresent(By.id("name")));
-        driver.switchTo().frame(driver.findElement(By.id("frame-1")));
+        driver.switchTo().frame(driver.findElement(By.id("frame1")));
         //assert we've properly switched
         assertTrue(driver.isElementPresent(By.id("name")));
         driver.switchTo().parentFrame();
-        driver.switchTo().frame(driver.findElement(By.id("frame-2")));
+        driver.switchTo().frame(driver.findElement(By.id("frame2")));
         //assert we've properly switched
         assertFalse(driver.isElementPresent(By.id("name")));
         //assert reporter has proper information on switch
         Step step = reporter.getSteps().get(2);
         assertEquals(step.getNumber(), 3);
         assertNotEquals(step.getTime(), 0.0);
-        assertEquals(step.getAction(),"Switching to frame with element 'By.id: frame-1'");
+        assertEquals(step.getAction(),"Switching to frame with element 'By.id: frame1'");
         assertEquals(step.getExpected(),"Frame selected");
         assertTrue(step.getActual().matches("Switched to frame"));
-        assertEquals(step.getStatus(), Step.Status.PASS);
+        assertEquals(step.getStatus(), Status.PASS);
         assertNull(step.getRequest());
         assertNull(step.getResponse());
         assertNotNull(step.getScreenshot());
@@ -162,7 +165,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
             assertEquals(step.getExpected(),"Frame selected");
             assertTrue(step.getActual().startsWith("Unable to switch to frame: " +
                     "org.openqa.selenium.NoSuchFrameException: no such frame: element is not a frame"));
-            assertEquals(step.getStatus(), Step.Status.FAIL);
+            assertEquals(step.getStatus(), Status.FAIL);
             assertNull(step.getRequest());
             assertNull(step.getResponse());
             assertNotNull(step.getScreenshot());
@@ -189,7 +192,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         assertEquals(step.getAction(), "Switching to parent frame");
         assertEquals(step.getExpected(), "Parent frame selected");
         assertEquals(step.getActual(), "Switched to parent frame");
-        assertEquals(step.getStatus(), Step.Status.PASS);
+        assertEquals(step.getStatus(), Status.PASS);
         assertNull(step.getRequest());
         assertNull(step.getResponse());
         assertNotNull(step.getScreenshot());
@@ -212,7 +215,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         assertEquals(step.getAction(), "Switching to parent frame");
         assertEquals(step.getExpected(), "Parent frame selected");
         assertEquals(step.getActual(), "Switched to parent frame");
-        assertEquals(step.getStatus(), Step.Status.PASS);
+        assertEquals(step.getStatus(), Status.PASS);
         assertNull(step.getRequest());
         assertNull(step.getResponse());
         assertNotNull(step.getScreenshot());
@@ -235,7 +238,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
             assertEquals(step.getExpected(), "Parent frame selected");
             assertTrue(step.getActual().startsWith("Unable to switch to parent frame: " +
                     "org.openqa.selenium.NoSuchSessionException: Session ID is null. Using WebDriver after calling quit()?"));
-            assertEquals(step.getStatus(), Step.Status.FAIL);
+            assertEquals(step.getStatus(), Status.FAIL);
             assertNull(step.getRequest());
             assertNull(step.getResponse());
             assertNull(step.getScreenshot());
@@ -261,7 +264,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         assertEquals(step.getAction(), "Switching to window with name or handle '" + windowHandle + "'");
         assertEquals(step.getExpected(), "Window selected");
         assertEquals(step.getActual(), "Switched to window with handle '" + windowHandle + "'");
-        assertEquals(step.getStatus(), Step.Status.PASS);
+        assertEquals(step.getStatus(), Status.PASS);
         assertNull(step.getRequest());
         assertNull(step.getResponse());
         assertNotNull(step.getScreenshot());
@@ -274,16 +277,16 @@ public class RemoteTargetLocatorIT extends FastTestBase {
 
         driver.get(iFrameURL);
         try {
-            driver.switchTo().window("No-Such-Window");
+            driver.switchTo().window("noSuchWindow");
         } finally {
             Step step = reporter.getSteps().get(2);
             assertEquals(step.getNumber(), 3);
             assertNotEquals(step.getTime(), 0.0);
-            assertEquals(step.getAction(), "Switching to window with name or handle 'No-Such-Window'");
+            assertEquals(step.getAction(), "Switching to window with name or handle 'noSuchWindow'");
             assertEquals(step.getExpected(), "Window selected");
             assertTrue(step.getActual().startsWith("Unable to switch to window: " +
                     "org.openqa.selenium.NoSuchWindowException: no such window"));
-            assertEquals(step.getStatus(), Step.Status.FAIL);
+            assertEquals(step.getStatus(), Status.FAIL);
             assertNull(step.getRequest());
             assertNull(step.getResponse());
             assertNotNull(step.getScreenshot());
@@ -308,7 +311,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         assertEquals(step.getAction(), "Switching to default content");
         assertEquals(step.getExpected(), "Default content selected");
         assertEquals(step.getActual(), "Switched to default content");
-        assertEquals(step.getStatus(), Step.Status.PASS);
+        assertEquals(step.getStatus(), Status.PASS);
         assertNull(step.getRequest());
         assertNull(step.getResponse());
         assertNotNull(step.getScreenshot());
@@ -320,7 +323,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         Reporter reporter = driver.getReporter();
 
         driver.get(iFrameURL);
-        driver.switchTo().frame("frame-1");
+        driver.switchTo().frame("frame1");
         assertTrue(driver.isElementPresent(By.id("name")));
         driver.switchTo().defaultContent();
         //assert we've properly switched
@@ -332,7 +335,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         assertEquals(step.getAction(), "Switching to default content");
         assertEquals(step.getExpected(), "Default content selected");
         assertEquals(step.getActual(), "Switched to default content");
-        assertEquals(step.getStatus(), Step.Status.PASS);
+        assertEquals(step.getStatus(), Status.PASS);
         assertNull(step.getRequest());
         assertNull(step.getResponse());
         assertNotNull(step.getScreenshot());
@@ -354,7 +357,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         assertEquals(step.getAction(), "Switching to default content");
         assertEquals(step.getExpected(), "Default content selected");
         assertEquals(step.getActual(), "Switched to default content");
-        assertEquals(step.getStatus(), Step.Status.PASS);
+        assertEquals(step.getStatus(), Status.PASS);
         assertNull(step.getRequest());
         assertNull(step.getResponse());
         assertNotNull(step.getScreenshot());
@@ -376,7 +379,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
             assertEquals(step.getExpected(), "Default content selected");
             assertTrue(step.getActual().startsWith("Unable to switch to default content: " +
                     "org.openqa.selenium.NoSuchSessionException: Session ID is null. Using WebDriver after calling quit()?"));
-            assertEquals(step.getStatus(), Step.Status.FAIL);
+            assertEquals(step.getStatus(), Status.FAIL);
             assertNull(step.getRequest());
             assertNull(step.getResponse());
             assertNull(step.getScreenshot());
@@ -388,47 +391,110 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
 
-        driver.get(framesURL);
-        assertFalse(driver.isElementPresent(By.id("company")));
-        driver.findElement(By.name("main")).click();
+        driver.get(maxURL);
+        //TODO - this isn't working
+        driver.findElement(By.id("input")).findElement(By.tagName("input")).sendKeys("123");
         WebElement element = driver.switchTo().activeElement();
-        //assert we've properly switched
-        assertTrue(driver.isElementPresent(By.id("company")));
+        //assert element is switched to
+        //TODO
         //assert reporter has proper information on switch
         Step step = reporter.getSteps().get(3);
         assertEquals(step.getNumber(), 4);
         assertNotEquals(step.getTime(), 0.0);
         assertEquals(step.getAction(), "Switching to active element");
-        assertEquals(step.getExpected(), "Active element successfully selected");
-        assertEquals(step.getActual(), "Successfully switched to active element 'By: company'");
-        assertEquals(step.getStatus(), Step.Status.PASS);
+        assertEquals(step.getExpected(), "Active element selected");
+        assertEquals(step.getActual(), "Switched to active element 'unknown locator [1]'");
+        assertEquals(step.getStatus(), Status.PASS);
+        assertNull(step.getRequest());
+        assertNull(step.getResponse());
+        assertNotNull(step.getScreenshot());
+    }
+
+    @Test
+    public void activeElementNoElementTest() {
+        WebDriver driver = drivers.get();
+        Reporter reporter = driver.getReporter();
+
+        driver.get(maxURL);
+        driver.switchTo().activeElement();
+        //assert reporter has proper information on switch
+        Step step = reporter.getSteps().get(2);
+        assertEquals(step.getNumber(), 3);
+        assertNotEquals(step.getTime(), 0.0);
+        assertEquals(step.getAction(), "Switching to active element");
+        assertEquals(step.getExpected(), "Active element selected");
+        assertEquals(step.getActual(), "Switched to active element 'unknown locator [1]'");
+        assertEquals(step.getStatus(), Status.PASS);
         assertNull(step.getRequest());
         assertNull(step.getResponse());
         assertNotNull(step.getScreenshot());
     }
 
     @Test(expectedExceptions = FailedStepException.class)
-    public void activeElementNoElementTest() {
-        //TODO - implement test
-    }
-
-    @Test(expectedExceptions = FailedStepException.class)
     public void activeElementNoDriverTest() {
-        //TODO - implement test
+        WebDriver driver = drivers.get();
+        Reporter reporter = driver.getReporter();
+
+        driver.quit();
+        try {
+            driver.switchTo().activeElement();
+        } finally {
+            Step step = reporter.getSteps().get(2);
+            assertEquals(step.getNumber(), 3);
+            assertNotEquals(step.getTime(), 0.0);
+            assertEquals(step.getAction(), "Switching to active element");
+            assertEquals(step.getExpected(), "Active element selected");
+            assertTrue(step.getActual().startsWith("Unable to switch to active element: " +
+                    "org.openqa.selenium.NoSuchSessionException: Session ID is null. Using WebDriver after calling quit()?"));
+            assertEquals(step.getStatus(), Status.FAIL);
+            assertNull(step.getRequest());
+            assertNull(step.getResponse());
+            assertNull(step.getScreenshot());
+        }
     }
 
     @Test
     public void alertTest() {
-        //TODO - implement test
+        WebDriver driver = drivers.get();
+        Reporter reporter = driver.getReporter();
+
+        driver.get(alertsURL);
+        driver.findElement(By.id("alertButton")).click();
+        Alert alert = driver.switchTo().alert();
+        //assert element is switched to
+        assertEquals(alert.getText(), "I am an alert!");
+        //assert reporter has proper information on switch
+        Step step = reporter.getSteps().get(3);
+        assertEquals(step.getNumber(), 4);
+        assertNotEquals(step.getTime(), 0.0);
+        assertEquals(step.getAction(), "Switching to active modal dialog");
+        assertEquals(step.getExpected(), "Active modal dialog selected");
+        assertEquals(step.getActual(), "Switched to active modal dialog with text 'I am an alert!'");
+        assertEquals(step.getStatus(), Status.PASS);
+        assertNull(step.getRequest());
+        assertNull(step.getResponse());
+        assertNull(step.getScreenshot());
     }
 
     @Test(expectedExceptions = FailedStepException.class)
     public void alertNoAlertTest() {
-        //TODO - implement test
-    }
+        WebDriver driver = drivers.get();
+        Reporter reporter = driver.getReporter();
 
-    @Test(expectedExceptions = FailedStepException.class)
-    public void alertNoDriverTest() {
-        //TODO - implement test
+        try {
+            driver.switchTo().alert();
+        } finally {
+            Step step = reporter.getSteps().get(1);
+            assertEquals(step.getNumber(), 2);
+            assertNotEquals(step.getTime(), 0.0);
+            assertEquals(step.getAction(), "Switching to active modal dialog");
+            assertEquals(step.getExpected(), "Active modal dialog selected");
+            assertTrue(step.getActual().startsWith("Unable to switch to active modal dialog: " +
+                    "org.openqa.selenium.NoAlertPresentException: no such alert"));
+            assertEquals(step.getStatus(), Status.FAIL);
+            assertNull(step.getRequest());
+            assertNull(step.getResponse());
+            assertNotNull(step.getScreenshot());
+        }
     }
 }

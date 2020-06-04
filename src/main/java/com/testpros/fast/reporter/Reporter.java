@@ -1,5 +1,6 @@
 package com.testpros.fast.reporter;
 
+import com.testpros.fast.RemoteWebDriver;
 import com.testpros.fast.reporter.Step.Status;
 import org.openqa.selenium.WebDriver;
 
