@@ -2,7 +2,6 @@ package com.testpros.fast;
 
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
-import com.testpros.fast.utilities.Constants;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -15,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+
+import static com.testpros.fast.utilities.Constants.*;
 
 public class WebElement implements org.openqa.selenium.WebElement {
 
@@ -237,7 +238,7 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public void waitForSelected() {
         if (!isSelected()) {
             // if it's not displayed, wait, and log that wait
-            Step step = new Step(Constants.WAITING_FOR_ELEMENT + elementName + "' to be selected",
+            Step step = new Step(WAITING_FOR_ELEMENT + elementName + "' to be selected",
                     "Element is selected");
             try {
                 WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
@@ -266,7 +267,7 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public void waitForEnabled() {
         if (!isEnabled()) {
             // if it's not displayed, wait, and log that wait
-            Step step = new Step(Constants.WAITING_FOR_ELEMENT + elementName + "' to be enabled",
+            Step step = new Step(WAITING_FOR_ELEMENT + elementName + "' to be enabled",
                     "Element is enabled");
             try {
                 WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
@@ -356,7 +357,7 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public void waitForDisplayed() {
         if (!isDisplayed()) {
             // if it's not displayed, wait, and log that wait
-            Step step = new Step(Constants.WAITING_FOR_ELEMENT + elementName + "' to be displayed",
+            Step step = new Step(WAITING_FOR_ELEMENT + elementName + "' to be displayed",
                     "Element is displayed");
             try {
                 WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
