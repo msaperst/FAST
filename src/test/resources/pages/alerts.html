@@ -13,7 +13,7 @@
 
             confirmButton.addEventListener('click', function(event) {
                 var answer = confirm('Is this not great?');
-                if (answer == true) {
+                if (answer === true) {
                     popupResponse.innerHTML = "You pressed OK!";
                 } else {
                     popupResponse.innerHTML = "You pressed Cancel!";
