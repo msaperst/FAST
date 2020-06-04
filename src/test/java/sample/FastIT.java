@@ -2,7 +2,6 @@ package sample;
 
 import com.testpros.fast.*;
 import com.testpros.fast.reporter.Step;
-import com.testpros.fast.reporter.Step.Status;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;

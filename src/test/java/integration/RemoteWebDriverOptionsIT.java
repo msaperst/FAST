@@ -6,7 +6,6 @@ import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import com.testpros.fast.reporter.Step.Status;
 import org.openqa.selenium.Cookie;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.Set;

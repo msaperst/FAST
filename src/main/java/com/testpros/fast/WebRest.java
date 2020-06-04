@@ -3,7 +3,6 @@ package com.testpros.fast;
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.RestRequest;
 import com.testpros.fast.reporter.Step;
-import com.testpros.fast.reporter.Step.Status;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
