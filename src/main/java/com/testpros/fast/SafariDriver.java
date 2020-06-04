@@ -11,7 +11,7 @@ public class SafariDriver extends RemoteWebDriver {
     public SafariDriver(Capabilities desiredCapabilities) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.safari.SafariDriver();
+            seleniumRemoteWebDriver = new org.openqa.selenium.safari.SafariDriver();
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -23,7 +23,7 @@ public class SafariDriver extends RemoteWebDriver {
     public SafariDriver(SafariOptions safariOptions) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.safari.SafariDriver(safariOptions);
+            seleniumRemoteWebDriver = new org.openqa.selenium.safari.SafariDriver(safariOptions);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -35,7 +35,7 @@ public class SafariDriver extends RemoteWebDriver {
     public SafariDriver(SafariDriverService safariService) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.safari.SafariDriver(safariService);
+            seleniumRemoteWebDriver = new org.openqa.selenium.safari.SafariDriver(safariService);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -47,7 +47,7 @@ public class SafariDriver extends RemoteWebDriver {
     public SafariDriver(SafariDriverService safariServer, SafariOptions safariOptions) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.safari.SafariDriver(safariServer, safariOptions);
+            seleniumRemoteWebDriver = new org.openqa.selenium.safari.SafariDriver(safariServer, safariOptions);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);

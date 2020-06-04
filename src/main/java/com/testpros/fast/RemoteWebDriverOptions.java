@@ -117,7 +117,7 @@ public class RemoteWebDriverOptions implements Options {
         try {
             options.deleteAllCookies();
             step.setTime();
-            if (options.getCookies().size() > 0) {
+            if (!options.getCookies().isEmpty()) {
                 step.setFailed("Failed to remove all cookies from browser session");
             } else {
                 step.setPassed("Successfully removed all cookies from browser session");

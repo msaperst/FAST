@@ -16,7 +16,7 @@ public class FastTestBase {
     public void setupDevice() {
         WebDriverManager.chromedriver().forceCache().setup();
         ChromeOptions chromeOptions = new ChromeOptions();
-//        chromeOptions.setHeadless(true);
+        chromeOptions.setHeadless(true);
         drivers.set(new ChromeDriver(chromeOptions));
     }
 

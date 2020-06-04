@@ -6,6 +6,7 @@ import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import com.testpros.fast.reporter.Step.Status;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.NoSuchSessionException;
 import org.testng.annotations.Test;
 
 import java.util.Set;
@@ -40,7 +41,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
     }
 
     @Test(expectedExceptions = FailedStepException.class)
-    public void addCookieNoDriverTest() {
+    public void addCookieNoDomainTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
 
@@ -84,7 +85,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
         assertNotNull(step.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void deleteCookieNamedNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
@@ -130,7 +131,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
         assertNotNull(step.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void deleteCookieNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
@@ -176,7 +177,7 @@ public class RemoteWebDriverOptionsIT extends FastTestBase {
         assertNotNull(step.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void deleteAllCookiesNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();

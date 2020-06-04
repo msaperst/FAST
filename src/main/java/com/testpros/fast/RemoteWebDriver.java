@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
 
-    org.openqa.selenium.remote.RemoteWebDriver remoteWebDriver;
+    org.openqa.selenium.remote.RemoteWebDriver seleniumRemoteWebDriver;
     Capabilities capabilities;
     Reporter reporter = new Reporter(null);
 
@@ -28,7 +28,7 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
     }
 
     public org.openqa.selenium.remote.RemoteWebDriver getDriver() {
-        return remoteWebDriver;
+        return seleniumRemoteWebDriver;
     }
 
     String getDeviceName() {
@@ -47,14 +47,14 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
     void passStep(Step step) {
         step.setPassed(getDriverName() + " started");
         if (reporter.getDriver() == null) {
-            reporter = new Reporter(remoteWebDriver);
+            reporter = new Reporter(seleniumRemoteWebDriver);
         }
     }
 
     void failStep(Step step, Exception e) {
         step.setFailed("Unable to launch new " + getDeviceName() + " instance: " + e);
         if (reporter.getDriver() == null) {
-            reporter = new Reporter(remoteWebDriver);
+            reporter = new Reporter(seleniumRemoteWebDriver);
         }
     }
 
@@ -66,7 +66,7 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
         this.capabilities = capabilities;
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.remote.RemoteWebDriver(capabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.remote.RemoteWebDriver(capabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -79,7 +79,7 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
         this.capabilities = capabilities;
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.remote.RemoteWebDriver(executor, capabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.remote.RemoteWebDriver(executor, capabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -92,7 +92,7 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
         this.capabilities = capabilities;
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.remote.RemoteWebDriver(remoteAddress, capabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.remote.RemoteWebDriver(remoteAddress, capabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);

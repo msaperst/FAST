@@ -10,7 +10,7 @@ public class OperaDriver extends RemoteWebDriver {
     public OperaDriver() {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.opera.OperaDriver();
+            seleniumRemoteWebDriver = new org.openqa.selenium.opera.OperaDriver();
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -22,7 +22,7 @@ public class OperaDriver extends RemoteWebDriver {
     public OperaDriver(OperaDriverService service) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.opera.OperaDriver(service);
+            seleniumRemoteWebDriver = new org.openqa.selenium.opera.OperaDriver(service);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -35,7 +35,7 @@ public class OperaDriver extends RemoteWebDriver {
     public OperaDriver(Capabilities capabilities) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.opera.OperaDriver(capabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.opera.OperaDriver(capabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -47,7 +47,7 @@ public class OperaDriver extends RemoteWebDriver {
     public OperaDriver(OperaOptions options) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.opera.OperaDriver(options);
+            seleniumRemoteWebDriver = new org.openqa.selenium.opera.OperaDriver(options);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -59,7 +59,7 @@ public class OperaDriver extends RemoteWebDriver {
     public OperaDriver(OperaDriverService service, OperaOptions options) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.opera.OperaDriver(service, options);
+            seleniumRemoteWebDriver = new org.openqa.selenium.opera.OperaDriver(service, options);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -72,7 +72,7 @@ public class OperaDriver extends RemoteWebDriver {
     public OperaDriver(OperaDriverService service, Capabilities capabilities) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.opera.OperaDriver(service, capabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.opera.OperaDriver(service, capabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);

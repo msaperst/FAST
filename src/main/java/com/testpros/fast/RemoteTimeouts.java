@@ -4,7 +4,7 @@ import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver.*;
+import org.openqa.selenium.WebDriver.Timeouts;
 
 import java.util.concurrent.TimeUnit;
 
@@ -34,9 +34,14 @@ public class RemoteTimeouts implements Timeouts {
      * Additionally, this will log the activity into the FAST reporter. If any errors
      * are encountered it is considered a failure, and the error will be recorded, otherwise it
      * will be considered a pass.
+     *
      * @param time The amount of time to wait.
      * @param unit The unit of measure for {@code time}.
      * @return A self reference.
+     * @deprecated when using the FAST framework, instead of using this implicit wait, use the
+     * {@link RemoteWebDriver#waitForElementPresent(By)} which adds logging. Note, that the specific
+     * FAST wait is automatically used in {@link RemoteWebDriver#findElement(By)}, but not in
+     * {@link RemoteWebDriver#findElements(By)}
      */
     @Deprecated
     @Override
@@ -61,6 +66,7 @@ public class RemoteTimeouts implements Timeouts {
      * Additionally, this will log the activity into the FAST reporter. If any errors
      * are encountered it is considered a failure, and the error will be recorded, otherwise it
      * will be considered a pass.
+     *
      * @param time The timeout value.
      * @param unit The unit of time.
      * @return A self reference.
@@ -87,6 +93,7 @@ public class RemoteTimeouts implements Timeouts {
      * Additionally, this will log the activity into the FAST reporter. If any errors
      * are encountered it is considered a failure, and the error will be recorded, otherwise it
      * will be considered a pass.
+     *
      * @param time The timeout value.
      * @param unit The unit of time.
      * @return A Timeouts interface.

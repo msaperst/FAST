@@ -2,6 +2,7 @@ package com.testpros.fast;
 
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
+import com.testpros.fast.utilities.Constants;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -17,6 +18,8 @@ import java.util.List;
 
 public class WebElement implements org.openqa.selenium.WebElement {
 
+    public static final String WAITED = "Waited '";
+    public static final String AFTER_WAITING = "After waiting '";
     RemoteWebDriver driver;
     org.openqa.selenium.WebElement element;
     String elementName;
@@ -234,14 +237,14 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public void waitForSelected() {
         if (!isSelected()) {
             // if it's not displayed, wait, and log that wait
-            Step step = new Step("Waiting for element '" + elementName + "' to be selected",
+            Step step = new Step(Constants.WAITING_FOR_ELEMENT + elementName + "' to be selected",
                     "Element is selected");
             try {
                 WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
                 wait.until((ExpectedCondition<Boolean>) d -> isSelected());
-                step.setPassed("Waited '" + step.getTime() + "' milliseconds for element to be selected");
+                step.setPassed(WAITED + step.getTime() + "' milliseconds for element to be selected");
             } catch (TimeoutException e) {
-                step.setFailed("After waiting '" + driver.waitTime + "' seconds, element is not selected");
+                step.setFailed(AFTER_WAITING + driver.waitTime + "' seconds, element is not selected");
             } finally {
                 reporter.addStep(step);
             }
@@ -263,14 +266,14 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public void waitForEnabled() {
         if (!isEnabled()) {
             // if it's not displayed, wait, and log that wait
-            Step step = new Step("Waiting for element '" + elementName + "' to be enabled",
+            Step step = new Step(Constants.WAITING_FOR_ELEMENT + elementName + "' to be enabled",
                     "Element is enabled");
             try {
                 WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
                 wait.until((ExpectedCondition<Boolean>) d -> isEnabled());
-                step.setPassed("Waited '" + step.getTime() + "' milliseconds for element to be enabled");
+                step.setPassed(WAITED + step.getTime() + "' milliseconds for element to be enabled");
             } catch (TimeoutException e) {
-                step.setFailed("After waiting '" + driver.waitTime + "' seconds, element is not enabled");
+                step.setFailed(AFTER_WAITING + driver.waitTime + "' seconds, element is not enabled");
             } finally {
                 reporter.addStep(step);
             }
@@ -319,10 +322,10 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public List<WebElement> findElements(By by) {
         // not doing any logging, as this is just a check, nothing to log
         List<WebElement> webElements = new ArrayList<>();
-        List<org.openqa.selenium.WebElement> elements = this.element.findElements(by);
+        List<org.openqa.selenium.WebElement> seleniumWebElements = this.element.findElements(by);
         int counter = 1;
-        for (org.openqa.selenium.WebElement element : elements) {
-            webElements.add(new WebElement(driver, element, counter));
+        for (org.openqa.selenium.WebElement seleniumWebElement : seleniumWebElements) {
+            webElements.add(new WebElement(driver, seleniumWebElement, counter));
             counter++;
         }
         return webElements;
@@ -353,14 +356,14 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public void waitForDisplayed() {
         if (!isDisplayed()) {
             // if it's not displayed, wait, and log that wait
-            Step step = new Step("Waiting for element '" + elementName + "' to be displayed",
+            Step step = new Step(Constants.WAITING_FOR_ELEMENT + elementName + "' to be displayed",
                     "Element is displayed");
             try {
                 WebDriverWait wait = new WebDriverWait(driver, driver.waitTime, driver.pollTime);
                 wait.until((ExpectedCondition<Boolean>) d -> isDisplayed());
-                step.setPassed("Waited '" + step.getTime() + "' milliseconds for element to be displayed");
+                step.setPassed(WAITED + step.getTime() + "' milliseconds for element to be displayed");
             } catch (TimeoutException e) {
-                step.setFailed("After waiting '" + driver.waitTime + "' seconds, element is not displayed");
+                step.setFailed(AFTER_WAITING + driver.waitTime + "' seconds, element is not displayed");
             } finally {
                 reporter.addStep(step);
             }

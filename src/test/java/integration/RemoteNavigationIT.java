@@ -5,6 +5,7 @@ import com.testpros.fast.reporter.FailedStepException;
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import com.testpros.fast.reporter.Step.Status;
+import org.openqa.selenium.NoSuchSessionException;
 import org.testng.annotations.Test;
 
 import java.net.MalformedURLException;
@@ -57,7 +58,7 @@ public class RemoteNavigationIT extends FastTestBase {
         assertNotNull(step.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void backNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
@@ -125,7 +126,7 @@ public class RemoteNavigationIT extends FastTestBase {
         assertNotNull(step.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void forwardNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
@@ -190,7 +191,7 @@ public class RemoteNavigationIT extends FastTestBase {
         }
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void toStringNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
@@ -255,7 +256,7 @@ public class RemoteNavigationIT extends FastTestBase {
         }
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void toURLNoDriverTest() throws MalformedURLException {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
@@ -296,7 +297,7 @@ public class RemoteNavigationIT extends FastTestBase {
         assertNotNull(step.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void refreshNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();

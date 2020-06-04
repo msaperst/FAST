@@ -2,12 +2,12 @@ package integration;
 
 import com.testpros.fast.ChromeDriver;
 import com.testpros.fast.WebDriver;
-import com.testpros.fast.reporter.FailedStepException;
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import com.testpros.fast.reporter.Step.Status;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.BeforeMethod;
@@ -52,7 +52,7 @@ public class RemoteWindowIT extends FastTestBase {
         assertNotNull(sizeStep.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void setSizeNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
@@ -96,7 +96,7 @@ public class RemoteWindowIT extends FastTestBase {
         assertNotNull(sizeStep.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void setPositionNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
@@ -163,7 +163,7 @@ public class RemoteWindowIT extends FastTestBase {
         assertNotNull(sizeStep.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void maximizeNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
@@ -208,7 +208,7 @@ public class RemoteWindowIT extends FastTestBase {
         assertNotNull(sizeStep.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void fullscreenNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();

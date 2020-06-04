@@ -7,6 +7,7 @@ import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
 import com.testpros.fast.reporter.Step.Status;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import sample.Property;
@@ -221,7 +222,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         assertNotNull(step.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void parentFrameNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
@@ -363,7 +364,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         assertNotNull(step.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void defaultContentNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();
@@ -430,7 +431,7 @@ public class RemoteTargetLocatorIT extends FastTestBase {
         assertNotNull(step.getScreenshot());
     }
 
-    @Test(expectedExceptions = FailedStepException.class)
+    @Test(expectedExceptions = NoSuchSessionException.class)
     public void activeElementNoDriverTest() {
         WebDriver driver = drivers.get();
         Reporter reporter = driver.getReporter();

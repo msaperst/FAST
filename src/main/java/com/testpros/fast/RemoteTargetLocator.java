@@ -2,6 +2,7 @@ package com.testpros.fast;
 
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
+import com.testpros.fast.utilities.Constants;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -9,6 +10,7 @@ import org.openqa.selenium.WebDriver.TargetLocator;
 
 public class RemoteTargetLocator implements TargetLocator {
 
+    public static final String UNABLE_TO_SWITCH_TO_FRAME = "Unable to switch to frame: ";
     private final Reporter reporter;
     private final com.testpros.fast.RemoteWebDriver driver;
     private final TargetLocator targetLocator;
@@ -34,13 +36,13 @@ public class RemoteTargetLocator implements TargetLocator {
     @Override
     public WebDriver frame(int index) {
         Step step = new Step("Switching to frame with index '" + index + "'",
-                "Frame selected");
+                Constants.FRAME_SELECTED);
         try {
-            WebDriver driver = targetLocator.frame(index);
-            step.setPassed("Switched to frame");
-            return driver;
+            WebDriver frameDriver = targetLocator.frame(index);
+            step.setPassed(Constants.SWITCHED_TO_FRAME);
+            return frameDriver;
         } catch (Exception e) {
-            step.setFailed("Unable to switch to frame: " + e);
+            step.setFailed(UNABLE_TO_SWITCH_TO_FRAME + e);
         } finally {
             reporter.addStep(step);
         }
@@ -61,13 +63,13 @@ public class RemoteTargetLocator implements TargetLocator {
     @Override
     public WebDriver frame(String nameOrId) {
         Step step = new Step("Switching to frame with name or id '" + nameOrId + "'",
-                "Frame selected");
+                Constants.FRAME_SELECTED);
         try {
-            WebDriver driver = targetLocator.frame(nameOrId);
-            step.setPassed("Switched to frame");
-            return driver;
+            WebDriver frameDriver = targetLocator.frame(nameOrId);
+            step.setPassed(Constants.SWITCHED_TO_FRAME);
+            return frameDriver;
         } catch (Exception e) {
-            step.setFailed("Unable to switch to frame: " + e);
+            step.setFailed(UNABLE_TO_SWITCH_TO_FRAME + e);
         } finally {
             reporter.addStep(step);
         }
@@ -89,13 +91,13 @@ public class RemoteTargetLocator implements TargetLocator {
     public WebDriver frame(org.openqa.selenium.WebElement frameElement) {
         WebElement fastFrameElement = (WebElement) frameElement;
         Step step = new Step("Switching to frame with element '" + fastFrameElement.getElementName() + "'",
-                "Frame selected");
+                Constants.FRAME_SELECTED);
         try {
-            WebDriver driver = targetLocator.frame(fastFrameElement.getWebElement());
-            step.setPassed("Switched to frame");
-            return driver;
+            WebDriver frameDriver = targetLocator.frame(fastFrameElement.getWebElement());
+            step.setPassed(Constants.SWITCHED_TO_FRAME);
+            return frameDriver;
         } catch (Exception e) {
-            step.setFailed("Unable to switch to frame: " + e);
+            step.setFailed(UNABLE_TO_SWITCH_TO_FRAME + e);
         } finally {
             reporter.addStep(step);
         }
@@ -115,9 +117,9 @@ public class RemoteTargetLocator implements TargetLocator {
     public WebDriver parentFrame() {
         Step step = new Step("Switching to parent frame", "Parent frame selected");
         try {
-            WebDriver driver = targetLocator.parentFrame();
+            WebDriver parentDriver = targetLocator.parentFrame();
             step.setPassed("Switched to parent frame");
-            return driver;
+            return parentDriver;
         } catch (Exception e) {
             step.setFailed("Unable to switch to parent frame: " + e);
         } finally {
@@ -141,14 +143,14 @@ public class RemoteTargetLocator implements TargetLocator {
         Step step = new Step("Switching to window with name or handle '" + nameOrHandle + "'",
                 "Window selected");
         try {
-            WebDriver driver = targetLocator.window(nameOrHandle);
-            step.setActual("Switched to window with handle '" + driver.getWindowHandle() + "'");
-            if( nameOrHandle.equals(driver.getWindowHandle())) {
+            WebDriver windowDriver = targetLocator.window(nameOrHandle);
+            step.setActual("Switched to window with handle '" + windowDriver.getWindowHandle() + "'");
+            if( nameOrHandle.equals(windowDriver.getWindowHandle())) {
                 step.setPassed();
             } else {
                 step.setFailed();
             }
-            return driver;
+            return windowDriver;
         } catch (Exception e) {
             step.setFailed("Unable to switch to window: " + e);
         } finally {
@@ -171,9 +173,9 @@ public class RemoteTargetLocator implements TargetLocator {
         Step step = new Step("Switching to default content",
                 "Default content selected");
         try {
-            WebDriver driver = targetLocator.defaultContent();
+            WebDriver contentDriver = targetLocator.defaultContent();
             step.setPassed("Switched to default content");
-            return driver;
+            return contentDriver;
         } catch (Exception e) {
             step.setFailed("Unable to switch to default content: " + e);
         } finally {

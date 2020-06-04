@@ -10,7 +10,7 @@ public class EdgeDriver extends RemoteWebDriver {
     public EdgeDriver() {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.edge.EdgeDriver();
+            seleniumRemoteWebDriver = new org.openqa.selenium.edge.EdgeDriver();
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -22,7 +22,7 @@ public class EdgeDriver extends RemoteWebDriver {
     public EdgeDriver(EdgeDriverService service) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(service);
+            seleniumRemoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(service);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -35,7 +35,7 @@ public class EdgeDriver extends RemoteWebDriver {
     public EdgeDriver(Capabilities capabilities) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(capabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(capabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -47,7 +47,7 @@ public class EdgeDriver extends RemoteWebDriver {
     public EdgeDriver(EdgeOptions options) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(options);
+            seleniumRemoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(options);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -59,7 +59,7 @@ public class EdgeDriver extends RemoteWebDriver {
     public EdgeDriver(EdgeDriverService service, EdgeOptions options) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(service, options);
+            seleniumRemoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(service, options);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -72,7 +72,7 @@ public class EdgeDriver extends RemoteWebDriver {
     public EdgeDriver(EdgeDriverService service, Capabilities capabilities) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(service, capabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(service, capabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);

@@ -10,7 +10,7 @@ public class ChromeDriver extends RemoteWebDriver {
     public ChromeDriver() {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver();
+            seleniumRemoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver();
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -22,7 +22,7 @@ public class ChromeDriver extends RemoteWebDriver {
     public ChromeDriver(ChromeDriverService service) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(service);
+            seleniumRemoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(service);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -35,7 +35,7 @@ public class ChromeDriver extends RemoteWebDriver {
     public ChromeDriver(Capabilities capabilities) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(capabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(capabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -47,7 +47,7 @@ public class ChromeDriver extends RemoteWebDriver {
     public ChromeDriver(ChromeOptions options) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(options);
+            seleniumRemoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(options);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -59,7 +59,7 @@ public class ChromeDriver extends RemoteWebDriver {
     public ChromeDriver(ChromeDriverService service, ChromeOptions options) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(service, options);
+            seleniumRemoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(service, options);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -72,7 +72,7 @@ public class ChromeDriver extends RemoteWebDriver {
     public ChromeDriver(ChromeDriverService service, Capabilities capabilities) {
         Step step = setupStep();
         try {
-            remoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(service, capabilities);
+            seleniumRemoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(service, capabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);

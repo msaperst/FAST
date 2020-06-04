@@ -34,9 +34,9 @@ public class Reporter {
             }
         } finally {
             steps.add(step);
-            if (step.getStatus() == Status.FAIL) {
-                throw new FailedStepException("Expected to " + step.getExpected() + ", instead " + step.getActual());
-            }
+        }
+        if (step.getStatus() == Status.FAIL) {
+            throw new FailedStepException("Expected to " + step.getExpected() + ", instead " + step.getActual());
         }
     }
 
