@@ -271,9 +271,11 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
 
     /**
      * Quits this driver, closing every associated window. Additionally, this will log the
-     * activity into the FAST reporter. If all windows are closed, and the driver has exited,
-     * it will be considered a pass, otherwise a failure will be recorded, with the
-     * reason for the failure.
+     * activity into the FAST reporter. Additionally, calling this method will set the end
+     * time in the reporter. If you want the test to end later (or sooner), a separate call
+     * to {@link Reporter#setEndTime()} must be made. If all windows are closed, and the
+     * driver has exited, it will be considered a pass, otherwise a failure will be recorded,
+     * with the reason for the failure.
      */
     @Override
     public void quit() {
@@ -286,6 +288,7 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
             step.setFailed("Unable to destroy " + getDeviceName() + " instance: " + e);
         } finally {
             getReporter().addStep(step, false);
+            getReporter().setEndTime();
         }
     }
 
