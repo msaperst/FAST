@@ -153,7 +153,7 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
      */
     public boolean isElementPresent(By by) {
         try {
-            getDriver().findElement(by);
+            getDriver().findElement(by.getBy());
             return true;
         } catch (NoSuchElementException | StaleElementReferenceException e) {
             // not doing any logging, as this is just a check, nothing to log
@@ -168,7 +168,7 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
                     "Element is present");
             try {
                 WebDriverWait wait = new WebDriverWait(getDriver(), waitTime, pollTime);
-                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
+                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by.getBy()));
                 step.setPassed("Waited '" + step.getTime() + "' milliseconds for element to be present");
             } catch (TimeoutException e) {
                 step.setFailed("After waiting '" + waitTime + "' seconds, element is not present");
@@ -223,7 +223,7 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
     public List<WebElement> findElements(By by) {
         // not doing any logging, as this is just a check, nothing to log
         List<WebElement> webElements = new ArrayList<>();
-        List<org.openqa.selenium.WebElement> elements = getDriver().findElements(by);
+        List<org.openqa.selenium.WebElement> elements = getDriver().findElements(by.getBy());
         int counter = 1;
         for (org.openqa.selenium.WebElement element : elements) {
             webElements.add(new WebElement(this, element, counter));

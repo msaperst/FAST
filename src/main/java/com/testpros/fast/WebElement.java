@@ -37,11 +37,11 @@ public class WebElement implements org.openqa.selenium.WebElement {
     // TODO - JavaDoc
     protected WebElement(RemoteWebDriver driver, By by) {
         this.driver = driver;
-        this.elementName = by.toString().trim();   //TODO - clean this up some
+        this.elementName = by.getBy().toString().trim();   //TODO - clean this up some
         this.reporter = driver.getReporter();
         // before we do anything, ensure the element present, and wait for it if needed
         driver.waitForElementPresent(by);
-        this.element = driver.getDriver().findElement(by);
+        this.element = driver.getDriver().findElement(by.getBy());
         // scroll to the element
         // TODO
         // capture the element
@@ -323,7 +323,7 @@ public class WebElement implements org.openqa.selenium.WebElement {
     public List<WebElement> findElements(By by) {
         // not doing any logging, as this is just a check, nothing to log
         List<WebElement> webElements = new ArrayList<>();
-        List<org.openqa.selenium.WebElement> seleniumWebElements = this.element.findElements(by);
+        List<org.openqa.selenium.WebElement> seleniumWebElements = this.element.findElements(by.getBy());
         int counter = 1;
         for (org.openqa.selenium.WebElement seleniumWebElement : seleniumWebElements) {
             webElements.add(new WebElement(driver, seleniumWebElement, counter));
