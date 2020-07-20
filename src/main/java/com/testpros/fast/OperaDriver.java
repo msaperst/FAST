@@ -20,6 +20,7 @@ public class OperaDriver extends RemoteWebDriver {
     }
 
     public OperaDriver(OperaDriverService service) {
+        this.service = service;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.opera.OperaDriver(service);
@@ -33,6 +34,7 @@ public class OperaDriver extends RemoteWebDriver {
 
     @Deprecated
     public OperaDriver(Capabilities capabilities) {
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.opera.OperaDriver(capabilities);
@@ -45,6 +47,7 @@ public class OperaDriver extends RemoteWebDriver {
     }
 
     public OperaDriver(OperaOptions options) {
+        this.options = options;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.opera.OperaDriver(options);
@@ -57,6 +60,8 @@ public class OperaDriver extends RemoteWebDriver {
     }
 
     public OperaDriver(OperaDriverService service, OperaOptions options) {
+        this.service = service;
+        this.options = options;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.opera.OperaDriver(service, options);
@@ -70,6 +75,8 @@ public class OperaDriver extends RemoteWebDriver {
 
     @Deprecated
     public OperaDriver(OperaDriverService service, Capabilities capabilities) {
+        this.service = service;
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.opera.OperaDriver(service, capabilities);

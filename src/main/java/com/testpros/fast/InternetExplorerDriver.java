@@ -21,6 +21,7 @@ public class InternetExplorerDriver extends RemoteWebDriver {
 
     @Deprecated
     public InternetExplorerDriver(Capabilities capabilities) {
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(capabilities);
@@ -33,6 +34,7 @@ public class InternetExplorerDriver extends RemoteWebDriver {
     }
 
     public InternetExplorerDriver(InternetExplorerOptions options) {
+        this.options = options;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(options);
@@ -46,6 +48,7 @@ public class InternetExplorerDriver extends RemoteWebDriver {
 
     @Deprecated
     public InternetExplorerDriver(int port) {
+        this.port = port;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(port);
@@ -58,6 +61,7 @@ public class InternetExplorerDriver extends RemoteWebDriver {
     }
 
     public InternetExplorerDriver(InternetExplorerDriverService service) {
+        this.service = service;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service);
@@ -71,6 +75,8 @@ public class InternetExplorerDriver extends RemoteWebDriver {
 
     @Deprecated
     public InternetExplorerDriver(InternetExplorerDriverService service, Capabilities capabilities) {
+        this.service = service;
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service, capabilities);
@@ -83,6 +89,8 @@ public class InternetExplorerDriver extends RemoteWebDriver {
     }
 
     public InternetExplorerDriver(InternetExplorerDriverService service, InternetExplorerOptions options) {
+        this.service = service;
+        this.options = options;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service, options);
@@ -96,6 +104,9 @@ public class InternetExplorerDriver extends RemoteWebDriver {
 
     @Deprecated
     public InternetExplorerDriver(InternetExplorerDriverService service, Capabilities capabilities, int port) {
+        this.service = service;
+        this.capabilities = capabilities;
+        this.port = port;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.ie.InternetExplorerDriver(service, capabilities, port);

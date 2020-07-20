@@ -12,6 +12,8 @@ import java.net.URL;
 public class IOSDriver<T extends WebElement> extends RemoteWebDriver {
 
     public IOSDriver(HttpCommandExecutor executor, Capabilities capabilities) {
+        this.executor = executor;
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(executor, capabilities);
@@ -24,6 +26,8 @@ public class IOSDriver<T extends WebElement> extends RemoteWebDriver {
     }
 
     public IOSDriver(URL remoteAddress, Capabilities desiredCapabilities) {
+        this.remoteAddress = remoteAddress;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(remoteAddress, desiredCapabilities);
@@ -36,6 +40,9 @@ public class IOSDriver<T extends WebElement> extends RemoteWebDriver {
     }
 
     public IOSDriver(URL remoteAddress, HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
+        this.remoteAddress = remoteAddress;
+        this.httpClientFactory = httpClientFactory;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(remoteAddress, httpClientFactory, desiredCapabilities);
@@ -48,6 +55,8 @@ public class IOSDriver<T extends WebElement> extends RemoteWebDriver {
     }
 
     public IOSDriver(AppiumDriverLocalService service, Capabilities desiredCapabilities) {
+        this.service = service;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(service, desiredCapabilities);
@@ -61,6 +70,9 @@ public class IOSDriver<T extends WebElement> extends RemoteWebDriver {
 
     public IOSDriver(AppiumDriverLocalService service, HttpClient.Factory httpClientFactory,
                      Capabilities desiredCapabilities) {
+        this.service = service;
+        this.httpClientFactory = httpClientFactory;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(service, httpClientFactory, desiredCapabilities);
@@ -73,6 +85,8 @@ public class IOSDriver<T extends WebElement> extends RemoteWebDriver {
     }
 
     public IOSDriver(AppiumServiceBuilder builder, Capabilities desiredCapabilities) {
+        this.builder = builder;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(builder, desiredCapabilities);
@@ -85,6 +99,9 @@ public class IOSDriver<T extends WebElement> extends RemoteWebDriver {
     }
 
     public IOSDriver(AppiumServiceBuilder builder, HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
+        this.builder = builder;
+        this.httpClientFactory = httpClientFactory;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(builder, httpClientFactory, desiredCapabilities);
@@ -97,6 +114,8 @@ public class IOSDriver<T extends WebElement> extends RemoteWebDriver {
     }
 
     public IOSDriver(HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
+        this.httpClientFactory = httpClientFactory;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(httpClientFactory, desiredCapabilities);
@@ -109,6 +128,7 @@ public class IOSDriver<T extends WebElement> extends RemoteWebDriver {
     }
 
     public IOSDriver(Capabilities desiredCapabilities) {
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.ios.IOSDriver<>(desiredCapabilities);

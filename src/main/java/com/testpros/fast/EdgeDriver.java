@@ -20,6 +20,7 @@ public class EdgeDriver extends RemoteWebDriver {
     }
 
     public EdgeDriver(EdgeDriverService service) {
+        this.service = service;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(service);
@@ -45,6 +46,7 @@ public class EdgeDriver extends RemoteWebDriver {
     }
 
     public EdgeDriver(EdgeOptions options) {
+        this.options = options;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(options);
@@ -70,6 +72,8 @@ public class EdgeDriver extends RemoteWebDriver {
 
     @Deprecated
     public EdgeDriver(EdgeDriverService service, Capabilities capabilities) {
+        this.service = service;
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.edge.EdgeDriver(service, capabilities);

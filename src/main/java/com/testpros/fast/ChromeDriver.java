@@ -20,6 +20,7 @@ public class ChromeDriver extends RemoteWebDriver {
     }
 
     public ChromeDriver(ChromeDriverService service) {
+        this.service = service;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(service);
@@ -33,6 +34,7 @@ public class ChromeDriver extends RemoteWebDriver {
 
     @Deprecated
     public ChromeDriver(Capabilities capabilities) {
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(capabilities);
@@ -57,6 +59,8 @@ public class ChromeDriver extends RemoteWebDriver {
     }
 
     public ChromeDriver(ChromeDriverService service, ChromeOptions options) {
+        this.service = service;
+        this.options = options;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(service, options);
@@ -70,6 +74,8 @@ public class ChromeDriver extends RemoteWebDriver {
 
     @Deprecated
     public ChromeDriver(ChromeDriverService service, Capabilities capabilities) {
+        this.service = service;
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.chrome.ChromeDriver(service, capabilities);

@@ -16,14 +16,7 @@
 // under the License.
 package com.testpros.fast;
 
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.*;
-
-import java.io.Serializable;
-import java.util.List;
+import io.appium.java_client.MobileSelector;
 
 /**
  * Mechanism used to locate elements within a document. In order to create your own locating
@@ -40,13 +33,26 @@ import java.util.List;
  * }
  * </code>
  */
-public abstract class By extends org.openqa.selenium.By {
+//public class By extends io.appium.java_client.MobileBy {
+//public abstract class By extends org.openqa.selenium.By {
+public class By {
+
+    org.openqa.selenium.By by;
+
+    public By(org.openqa.selenium.By by) {
+        this.by = by;
+    }
+
+    public org.openqa.selenium.By getBy() {
+        return by;
+    }
+    
     /**
      * @param id The value of the "id" attribute to search for.
      * @return A By which locates elements by the value of the "id" attribute.
      */
     public static By id(String id) {
-        return new ById(id);
+        return new By(org.openqa.selenium.By.id(id));
     }
 
     /**
@@ -54,7 +60,7 @@ public abstract class By extends org.openqa.selenium.By {
      * @return A By which locates A elements by the exact text it displays.
      */
     public static By linkText(String linkText) {
-        return new ByLinkText(linkText);
+        return new By(org.openqa.selenium.By.linkText(linkText));
     }
 
     /**
@@ -62,7 +68,7 @@ public abstract class By extends org.openqa.selenium.By {
      * @return a By which locates elements that contain the given link text.
      */
     public static By partialLinkText(String partialLinkText) {
-        return new ByPartialLinkText(partialLinkText);
+        return new By(org.openqa.selenium.By.partialLinkText(partialLinkText));
     }
 
     /**
@@ -70,15 +76,16 @@ public abstract class By extends org.openqa.selenium.By {
      * @return A By which locates elements by the value of the "name" attribute.
      */
     public static By name(String name) {
-        return new ByName(name);
+        return new By(org.openqa.selenium.By.name(name));
     }
+
 
     /**
      * @param tagName The element's tag name.
      * @return A By which locates elements by their tag name.
      */
     public static By tagName(String tagName) {
-        return new ByTagName(tagName);
+        return new By(org.openqa.selenium.By.tagName(tagName));
     }
 
     /**
@@ -86,7 +93,7 @@ public abstract class By extends org.openqa.selenium.By {
      * @return A By which locates elements via XPath.
      */
     public static By xpath(String xpathExpression) {
-        return new ByXPath(xpathExpression);
+        return new By(org.openqa.selenium.By.xpath(xpathExpression));
     }
 
     /**
@@ -98,7 +105,7 @@ public abstract class By extends org.openqa.selenium.By {
      * @return A By which locates elements by the value of the "class" attribute.
      */
     public static By className(String className) {
-        return new ByClassName(className);
+        return new By(org.openqa.selenium.By.className(className));
     }
 
     /**
@@ -110,341 +117,109 @@ public abstract class By extends org.openqa.selenium.By {
      * @return A By which locates elements by CSS.
      */
     public static By cssSelector(String cssSelector) {
-        return new ByCssSelector(cssSelector);
+        return new By(org.openqa.selenium.By.cssSelector(cssSelector));
     }
 
     /**
-     * Find a single element. Override this method if necessary.
+     * Read http://developer.android.com/intl/ru/tools/testing-support-library/
+     * index.html#uia-apis
      *
-     * @param context A context to use to find the element.
-     * @return The WebElement that matches the selector.
+     * @param uiautomatorText is Android UIAutomator string
+     * @return an instance of {@link By.ByAndroidUIAutomator}
      */
-    public org.openqa.selenium.WebElement findElement(SearchContext context) {
-        List<org.openqa.selenium.WebElement> allElements = findElements(context);
-        if (allElements == null || allElements.isEmpty()) {
-            throw new NoSuchElementException("Cannot locate an element using " + toString());
-        }
-        return allElements.get(0);
+    public static By AndroidUIAutomator(final String uiautomatorText) {
+        return new By(io.appium.java_client.MobileBy.AndroidUIAutomator(uiautomatorText));
     }
 
     /**
-     * Find many elements.
+     * About Android accessibility
+     * https://developer.android.com/intl/ru/training/accessibility/accessible-app.html
+     * About iOS accessibility
+     * https://developer.apple.com/library/ios/documentation/UIKit/Reference/
+     * UIAccessibilityIdentification_Protocol/index.html
      *
-     * @param context A context to use to find the elements.
-     * @return A list of WebElements matching the selector.
+     * @param accessibilityId id is a convenient UI automation accessibility Id.
+     * @return an instance of {@link By.ByAndroidUIAutomator}
      */
-    public abstract List<org.openqa.selenium.WebElement> findElements(SearchContext context);
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof By)) {
-            return false;
-        }
-
-        By that = (By) o;
-
-        return this.toString().equals(that.toString());
+    public static By AccessibilityId(final String accessibilityId) {
+        return new By(io.appium.java_client.MobileBy.AccessibilityId(accessibilityId));
     }
 
-    @Override
-    public int hashCode() {
-        return toString().hashCode();
+    /**
+     * This locator strategy is available in XCUITest Driver mode.
+     *
+     * @param iOSClassChainString is a valid class chain locator string.
+     *                            See <a href="https://github.com/facebook/WebDriverAgent/wiki/Queries">
+     *                            the documentation</a> for more details
+     * @return an instance of {@link By.ByIosClassChain}
+     */
+    public static By iOSClassChain(final String iOSClassChainString) {
+        return new By(io.appium.java_client.MobileBy.iOSClassChain(iOSClassChainString));
     }
 
-    @Override
-    public String toString() {
-        // A stub to prevent endless recursion in hashCode()
-        return "[unknown locator]";
+    /**
+     * This locator strategy is only available in Espresso Driver mode.
+     *
+     * @param dataMatcherString is a valid class chain locator string.
+     *                          See <a href="https://github.com/appium/appium-espresso-driver/pull/386">
+     *                          the documentation</a> for more details
+     * @return an instance of {@link By.ByAndroidDataMatcher}
+     */
+    public static By androidDataMatcher(final String dataMatcherString) {
+        return new By(io.appium.java_client.MobileBy.androidDataMatcher(dataMatcherString));
     }
 
-    public static class ById extends By implements Serializable {
-
-        private static final long serialVersionUID = 5341968046120372169L;
-
-        private final String id;
-
-        public ById(String id) {
-            if (id == null) {
-                throw new IllegalArgumentException("Cannot find elements when the id is null.");
-            }
-
-            this.id = id;
-        }
-
-        @Override
-        public List<org.openqa.selenium.WebElement> findElements(SearchContext context) {
-            if (context instanceof FindsById) {
-                return ((FindsById) context).findElementsById(id);
-            }
-            return ((FindsByXPath) context).findElementsByXPath(".//*[@id = '" + id + "']");
-        }
-
-        @Override
-        public org.openqa.selenium.WebElement findElement(SearchContext context) {
-            if (context instanceof FindsById) {
-                return ((FindsById) context).findElementById(id);
-            }
-            return ((FindsByXPath) context).findElementByXPath(".//*[@id = '" + id + "']");
-        }
-
-        @Override
-        public String toString() {
-            return "By.id: " + id;
-        }
+    /**
+     * This locator strategy is available in XCUITest Driver mode.
+     *
+     * @param iOSNsPredicateString is an an iOS NsPredicate String
+     * @return an instance of {@link By.ByIosNsPredicate}
+     */
+    public static By iOSNsPredicateString(final String iOSNsPredicateString) {
+        return new By(io.appium.java_client.MobileBy.iOSNsPredicateString(iOSNsPredicateString));
     }
 
-    public static class ByLinkText extends By implements Serializable {
-
-        private static final long serialVersionUID = 1967414585359739708L;
-
-        private final String linkText;
-
-        public ByLinkText(String linkText) {
-            if (linkText == null) {
-                throw new IllegalArgumentException("Cannot find elements when the link text is null.");
-            }
-
-            this.linkText = linkText;
-        }
-
-        @Override
-        public List<org.openqa.selenium.WebElement> findElements(SearchContext context) {
-            return ((FindsByLinkText) context).findElementsByLinkText(linkText);
-        }
-
-        @Override
-        public org.openqa.selenium.WebElement findElement(SearchContext context) {
-            return ((FindsByLinkText) context).findElementByLinkText(linkText);
-        }
-
-        @Override
-        public String toString() {
-            return "By.linkText: " + linkText;
-        }
+    public static By windowsAutomation(final String windowsAutomation) {
+        return new By(io.appium.java_client.MobileBy.windowsAutomation(windowsAutomation));
     }
 
-    public static class ByPartialLinkText extends By implements Serializable {
-
-        private static final long serialVersionUID = 1163955344140679054L;
-
-        private final String partialLinkText;
-
-        public ByPartialLinkText(String partialLinkText) {
-            if (partialLinkText == null) {
-                throw new IllegalArgumentException("Cannot find elements when the link text is null.");
-            }
-
-            this.partialLinkText = partialLinkText;
-        }
-
-        @Override
-        public List<org.openqa.selenium.WebElement> findElements(SearchContext context) {
-            return ((FindsByLinkText) context).findElementsByPartialLinkText(partialLinkText);
-        }
-
-        @Override
-        public org.openqa.selenium.WebElement findElement(SearchContext context) {
-            return ((FindsByLinkText) context).findElementByPartialLinkText(partialLinkText);
-        }
-
-        @Override
-        public String toString() {
-            return "By.partialLinkText: " + partialLinkText;
-        }
+    /**
+     * This locator strategy is available in Espresso Driver mode.
+     *
+     * @param tag is an view tag string
+     * @return an instance of {@link ByAndroidViewTag}
+     * @since Appium 1.8.2 beta
+     */
+    public static By AndroidViewTag(final String tag) {
+        return new By(io.appium.java_client.MobileBy.AndroidViewTag(tag));
     }
 
-    public static class ByName extends By implements Serializable {
-
-        private static final long serialVersionUID = 376317282960469555L;
-
-        private final String name;
-
-        public ByName(String name) {
-            if (name == null) {
-                throw new IllegalArgumentException("Cannot find elements when name text is null.");
-            }
-
-            this.name = name;
-        }
-
-        @Override
-        public List<org.openqa.selenium.WebElement> findElements(SearchContext context) {
-            if (context instanceof FindsByName) {
-                return ((FindsByName) context).findElementsByName(name);
-            }
-            return ((FindsByXPath) context).findElementsByXPath(".//*[@name = '" + name + "']");
-        }
-
-        @Override
-        public org.openqa.selenium.WebElement findElement(SearchContext context) {
-            if (context instanceof FindsByName) {
-                return ((FindsByName) context).findElementByName(name);
-            }
-            return ((FindsByXPath) context).findElementByXPath(".//*[@name = '" + name + "']");
-        }
-
-        @Override
-        public String toString() {
-            return "By.name: " + name;
-        }
+    /**
+     * This locator strategy is available only if OpenCV libraries and
+     * NodeJS bindings are installed on the server machine.
+     *
+     * @param b64Template base64-encoded template image string. Supported image formats are the same
+     *                    as for OpenCV library.
+     * @return an instance of {@link ByImage}
+     * @see <a href="https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/image-comparison.md">
+     * The documentation on Image Comparison Features</a>
+     * @see <a href="https://github.com/appium/appium-base-driver/blob/master/lib/basedriver/device-settings.js">
+     * The settings available for lookup fine-tuning</a>
+     * @since Appium 1.8.2
+     */
+    public static By image(final String b64Template) {
+        return new By(io.appium.java_client.MobileBy.image(b64Template));
     }
 
-    public static class ByTagName extends By implements Serializable {
-
-        private static final long serialVersionUID = 4699295846984948351L;
-
-        private final String tagName;
-
-        public ByTagName(String tagName) {
-            if (tagName == null) {
-                throw new IllegalArgumentException("Cannot find elements when the tag name is null.");
-            }
-
-            this.tagName = tagName;
-        }
-
-        @Override
-        public List<org.openqa.selenium.WebElement> findElements(SearchContext context) {
-            if (context instanceof FindsByTagName) {
-                return ((FindsByTagName) context).findElementsByTagName(tagName);
-            }
-            return ((FindsByXPath) context).findElementsByXPath(".//" + tagName);
-        }
-
-        @Override
-        public org.openqa.selenium.WebElement findElement(SearchContext context) {
-            if (context instanceof FindsByTagName) {
-                return ((FindsByTagName) context).findElementByTagName(tagName);
-            }
-            return ((FindsByXPath) context).findElementByXPath(".//" + tagName);
-        }
-
-        @Override
-        public String toString() {
-            return "By.tagName: " + tagName;
-        }
-    }
-
-    public static class ByXPath extends By implements Serializable {
-
-        private static final long serialVersionUID = -6727228887685051584L;
-
-        private final String xpathExpression;
-
-        public ByXPath(String xpathExpression) {
-            if (xpathExpression == null) {
-                throw new IllegalArgumentException(
-                        "Cannot find elements when the XPath is null.");
-            }
-
-            this.xpathExpression = xpathExpression;
-        }
-
-        @Override
-        public List<org.openqa.selenium.WebElement> findElements(SearchContext context) {
-            return ((FindsByXPath) context).findElementsByXPath(xpathExpression);
-        }
-
-        @Override
-        public org.openqa.selenium.WebElement findElement(SearchContext context) {
-            return ((FindsByXPath) context).findElementByXPath(xpathExpression);
-        }
-
-        @Override
-        public String toString() {
-            return "By.xpath: " + xpathExpression;
-        }
-    }
-
-    public static class ByClassName extends By implements Serializable {
-
-        private static final long serialVersionUID = -8737882849130394673L;
-
-        private final String className;
-
-        public ByClassName(String className) {
-            if (className == null) {
-                throw new IllegalArgumentException(
-                        "Cannot find elements when the class name expression is null.");
-            }
-
-            this.className = className;
-        }
-
-        @Override
-        public List<org.openqa.selenium.WebElement> findElements(SearchContext context) {
-            if (context instanceof FindsByClassName) {
-                return ((FindsByClassName) context).findElementsByClassName(className);
-            }
-            return ((FindsByXPath) context).findElementsByXPath(
-                    ".//*[" + containingWord("class", className) + "]");
-        }
-
-        @Override
-        public org.openqa.selenium.WebElement findElement(SearchContext context) {
-            if (context instanceof FindsByClassName) {
-                return ((FindsByClassName) context).findElementByClassName(className);
-            }
-            return ((FindsByXPath) context).findElementByXPath(
-                    ".//*[" + containingWord("class", className) + "]");
-        }
-
-        /**
-         * Generate a partial XPath expression that matches an element whose specified attribute
-         * contains the given CSS word. So to match &lt;div class='foo bar'&gt; you would say "//div[" +
-         * containingWord("class", "foo") + "]".
-         *
-         * @param attribute name
-         * @param word      name
-         * @return XPath fragment
-         */
-        private String containingWord(String attribute, String word) {
-            return "contains(concat(' ',normalize-space(@" + attribute + "),' '),' " + word + " ')";
-        }
-
-        @Override
-        public String toString() {
-            return "By.className: " + className;
-        }
-    }
-
-    public static class ByCssSelector extends By implements Serializable {
-
-        private static final long serialVersionUID = -3910258723099459239L;
-
-        private final String cssSelector;
-
-        public ByCssSelector(String cssSelector) {
-            if (cssSelector == null) {
-                throw new IllegalArgumentException("Cannot find elements when the selector is null");
-            }
-
-            this.cssSelector = cssSelector;
-        }
-
-        @Override
-        public WebElement findElement(SearchContext context) {
-            if (context instanceof FindsByCssSelector) {
-                return ((FindsByCssSelector) context).findElementByCssSelector(cssSelector);
-            }
-
-            throw new WebDriverException(
-                    "Driver does not support finding an element by selector: " + cssSelector);
-        }
-
-        @Override
-        public List<org.openqa.selenium.WebElement> findElements(SearchContext context) {
-            if (context instanceof FindsByCssSelector) {
-                return ((FindsByCssSelector) context).findElementsByCssSelector(cssSelector);
-            }
-
-            throw new WebDriverException(
-                    "Driver does not support finding elements by selector: " + cssSelector);
-        }
-
-        @Override
-        public String toString() {
-            return "By.cssSelector: " + cssSelector;
-        }
+    /**
+     * This type of locator requires the use of the 'customFindModules' capability and a
+     * separately-installed element finding plugin.
+     *
+     * @param selector selector to pass to the custom element finding plugin
+     * @return an instance of {@link ByCustom}
+     * @since Appium 1.9.2
+     */
+    public static By custom(final String selector) {
+        return new By(io.appium.java_client.MobileBy.custom(selector));
     }
 }

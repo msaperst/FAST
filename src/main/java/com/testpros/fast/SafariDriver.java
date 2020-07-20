@@ -9,6 +9,7 @@ public class SafariDriver extends RemoteWebDriver {
 
     @Deprecated
     public SafariDriver(Capabilities desiredCapabilities) {
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.safari.SafariDriver();
@@ -21,6 +22,7 @@ public class SafariDriver extends RemoteWebDriver {
     }
 
     public SafariDriver(SafariOptions safariOptions) {
+        this.options = safariOptions;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.safari.SafariDriver(safariOptions);
@@ -33,6 +35,7 @@ public class SafariDriver extends RemoteWebDriver {
     }
 
     public SafariDriver(SafariDriverService safariService) {
+        this.service = safariService;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.safari.SafariDriver(safariService);
@@ -45,6 +48,8 @@ public class SafariDriver extends RemoteWebDriver {
     }
 
     public SafariDriver(SafariDriverService safariServer, SafariOptions safariOptions) {
+        this.service = safariServer;
+        this.options = safariOptions;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.safari.SafariDriver(safariServer, safariOptions);
