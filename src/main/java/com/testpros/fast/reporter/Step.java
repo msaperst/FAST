@@ -118,10 +118,10 @@ public class Step {
     }
 
     public void takeScreenshot(WebDriver driver) {
-        if( !isActiveModalDialog(driver)) {
+        try {
             screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
-        } else {
-            //TODO - need a screenshot with alert
+        } catch(Exception e) {
+            screenshot = "Unable to capture screenshot: " + e.getMessage();
         }
     }
 

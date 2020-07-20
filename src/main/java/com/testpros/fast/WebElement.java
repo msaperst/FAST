@@ -2,6 +2,7 @@ package com.testpros.fast;
 
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
+import io.appium.java_client.AppiumDriver;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -32,6 +33,7 @@ public class WebElement implements org.openqa.selenium.WebElement {
         this.driver = driver;
         this.elementName = (element.toString().split("->")[1].replaceFirst("(?s)(.*)\\]", "$1" + "") + " [" + match + "]").trim();
         this.reporter = driver.getReporter();
+        this.element = element;
     }
 
     // TODO - JavaDoc
@@ -45,21 +47,40 @@ public class WebElement implements org.openqa.selenium.WebElement {
         // scroll to the element
         // TODO
         // capture the element
+        screenshot = screenshotElement();
+    }
+
+    // TODO - JavaDoc
+    protected WebElement(WebElement parent, By by) {
+        this.driver = parent.driver;
+        this.elementName = by.getBy().toString().trim();   //TODO - clean this up some
+        this.reporter = driver.getReporter();
+        // before we do anything, ensure the element present, and wait for it if needed
+        driver.waitForElementPresent(by);   // TODO - need to fix this
+        this.element = parent.element.findElement(by.getBy());
+        // scroll to the element
+        // TODO
+        // capture the element
+        screenshot = screenshotElement();
+    }
+
+    public String screenshotElement() {
         try {
             File fullPageScreenshot = ((TakesScreenshot) driver.getDriver()).getScreenshotAs(OutputType.FILE);
             BufferedImage fullImg = ImageIO.read(fullPageScreenshot);
             Rectangle rectangle = this.element.getRect();
             if (new Rectangle(0, 0, 0, 0).equals(rectangle)) {
-                return;
+                return null;
             }
             BufferedImage eleScreenshot = fullImg.getSubimage(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
             ImageIO.write(eleScreenshot, "png", fullPageScreenshot);
             byte[] fileContent = FileUtils.readFileToByteArray(fullPageScreenshot);
-            screenshot = Base64.getEncoder().encodeToString(fileContent);
-        } catch (IOException e) {
+            return Base64.getEncoder().encodeToString(fileContent);
+        } catch (Exception e) {
             //TODO - properly handle this error
             e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -149,8 +170,8 @@ public class WebElement implements org.openqa.selenium.WebElement {
      * using something like {@link #sendKeys(CharSequence...)} with the backspace key.  To ensure
      * you get a change event, consider following with a call to {@link #sendKeys(CharSequence...)}
      * with the tab key.
-     * This action is logged to the FAST reporter, including a screenshot
-     * after the action.
+     * This action is logged to the FAST reporter, including a screenshot after the action. If the text isn't
+     * cleared, a WARNING is added, as Appium or React may have hint text which will register as inputs;
      */
     public void clear() {
         Step step = new Step("Clearing all input from element '" + this.elementName + "'",
@@ -158,8 +179,14 @@ public class WebElement implements org.openqa.selenium.WebElement {
         try {
             this.element.clear();
             step.setTime();
-            if (!"".equals(getAttribute("value"))) {
-                step.setFailed("Failed to clear content from element");
+            String value;
+            if(this.driver.getDriver() instanceof AppiumDriver) {
+                value = this.getText();
+            } else {
+                value = this.getAttribute("value");
+            }
+            if (!"".equals(value)) {
+                step.setResult("Failed to clear content from element", Step.Status.CHECK);
             } else {
                 step.setPassed("Successfully cleared content from element");
             }
@@ -346,7 +373,7 @@ public class WebElement implements org.openqa.selenium.WebElement {
 
     public WebElement findElement(By by) {
         // not doing any logging, as this is just a check, nothing to log
-        return new WebElement(driver, by);
+        return new WebElement(this, by);
     }
 
     public boolean isDisplayed() {

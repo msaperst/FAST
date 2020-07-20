@@ -2,8 +2,11 @@ package com.testpros.fast;
 
 import com.testpros.fast.reporter.Reporter;
 import com.testpros.fast.reporter.Step;
+import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.CommandExecutor;
+import org.openqa.selenium.remote.http.HttpClient;
+import org.openqa.selenium.remote.service.DriverService;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -13,22 +16,64 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static com.testpros.fast.utilities.Constants.WAITING_FOR_ELEMENT;
+
 public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
 
     org.openqa.selenium.remote.RemoteWebDriver seleniumRemoteWebDriver;
     Capabilities capabilities;
+    DriverService service;
+    MutableCapabilities options;
+    CommandExecutor executor;
+    URL remoteAddress;
+    HttpClient.Factory httpClientFactory;
+    AppiumServiceBuilder builder;
+    int port;
+
     Reporter reporter = new Reporter(null);
 
     //wait times
     long waitTime = 5;  //TODO - need better ways to set/change these
     long pollTime = 50;  //TODO - need better ways to set/change these
 
-    public Reporter getReporter() {
-        return reporter;
-    }
-
     public org.openqa.selenium.remote.RemoteWebDriver getDriver() {
         return seleniumRemoteWebDriver;
+    }
+
+    public Capabilities getCapabilities() {
+        return capabilities;
+    }
+
+    public DriverService getService() {
+        return service;
+    }
+
+    public MutableCapabilities getOptions() {
+        return options;
+    }
+
+    public CommandExecutor getExecutor() {
+        return executor;
+    }
+
+    public URL getRemoteAddress() {
+        return remoteAddress;
+    }
+
+    public HttpClient.Factory getHttpClientFactory() {
+        return httpClientFactory;
+    }
+
+    public AppiumServiceBuilder getBuilder() {
+        return builder;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public Reporter getReporter() {
+        return reporter;
     }
 
     String getDeviceName() {
@@ -164,7 +209,7 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
     public void waitForElementPresent(By by) {
         if (!isElementPresent(by)) {
             // if it's not present, wait, and log that wait
-            Step step = new Step("Waiting for element '" + by + "' to be present",
+            Step step = new Step(WAITING_FOR_ELEMENT + by.getBy() + "' to be present",
                     "Element is present");
             try {
                 WebDriverWait wait = new WebDriverWait(getDriver(), waitTime, pollTime);
@@ -352,10 +397,11 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
      * the above. An exception will be thrown if the arguments do not meet these criteria. The
      * arguments will be made available to the JavaScript via the "arguments" magic variable, as if
      * the function were called via "Function.apply"
-     *
+     * <p>
      * Additionally, this will log the activity into the FAST reporter. If any errors
      * are encountered it is considered a failure, and the error will be recorded, otherwise it
      * will be considered a pass.
+     *
      * @param script The JavaScript to execute
      * @param args   The arguments to the script. May be empty
      * @return One of Boolean, Long, Double, String, List, Map or WebElement. Or null.
@@ -446,10 +492,11 @@ public class RemoteWebDriver implements WebDriver, JavascriptExecutor {
      * combination of the above. An exception will be thrown if the arguments do not meet these
      * criteria. The arguments will be made available to the JavaScript via the "arguments"
      * variable.
-     *
+     * <p>
      * Additionally, this will log the activity into the FAST reporter. If any errors
      * are encountered it is considered a failure, and the error will be recorded, otherwise it
      * will be considered a pass.
+     *
      * @param script The JavaScript to execute.
      * @param args   The arguments to the script. May be empty.
      * @return One of Boolean, Long, String, List, Map, WebElement, or null.

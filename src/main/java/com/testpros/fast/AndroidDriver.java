@@ -12,6 +12,8 @@ import java.net.URL;
 public class AndroidDriver<T extends WebElement> extends RemoteWebDriver {
 
     public AndroidDriver(HttpCommandExecutor executor, Capabilities capabilities) {
+        this.executor = executor;
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(executor, capabilities);
@@ -24,6 +26,8 @@ public class AndroidDriver<T extends WebElement> extends RemoteWebDriver {
     }
 
     public AndroidDriver(URL remoteAddress, Capabilities desiredCapabilities) {
+        this.remoteAddress = remoteAddress;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(remoteAddress, desiredCapabilities);
@@ -37,6 +41,9 @@ public class AndroidDriver<T extends WebElement> extends RemoteWebDriver {
 
     public AndroidDriver(URL remoteAddress, HttpClient.Factory httpClientFactory,
                          Capabilities desiredCapabilities) {
+        this.remoteAddress = remoteAddress;
+        this.httpClientFactory = httpClientFactory;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(remoteAddress,
@@ -50,6 +57,8 @@ public class AndroidDriver<T extends WebElement> extends RemoteWebDriver {
     }
 
     public AndroidDriver(AppiumDriverLocalService service, Capabilities desiredCapabilities) {
+        this.service = service;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(service, desiredCapabilities);
@@ -63,6 +72,9 @@ public class AndroidDriver<T extends WebElement> extends RemoteWebDriver {
 
     public AndroidDriver(AppiumDriverLocalService service, HttpClient.Factory httpClientFactory,
                          Capabilities desiredCapabilities) {
+        this.service = service;
+        this.httpClientFactory = httpClientFactory;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(service,
@@ -76,6 +88,8 @@ public class AndroidDriver<T extends WebElement> extends RemoteWebDriver {
     }
 
     public AndroidDriver(AppiumServiceBuilder builder, Capabilities desiredCapabilities) {
+        this.builder = builder;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(builder,
@@ -90,10 +104,13 @@ public class AndroidDriver<T extends WebElement> extends RemoteWebDriver {
 
     public AndroidDriver(AppiumServiceBuilder builder, HttpClient.Factory httpClientFactory,
                          Capabilities desiredCapabilities) {
+        this.builder = builder;
+        this.httpClientFactory = httpClientFactory;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(builder,
-                    desiredCapabilities);
+                    httpClientFactory, desiredCapabilities);
             passStep(step);
         } catch (Exception e) {
             failStep(step, e);
@@ -103,6 +120,8 @@ public class AndroidDriver<T extends WebElement> extends RemoteWebDriver {
     }
 
     public AndroidDriver(HttpClient.Factory httpClientFactory, Capabilities desiredCapabilities) {
+        this.httpClientFactory = httpClientFactory;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(httpClientFactory,
@@ -116,6 +135,7 @@ public class AndroidDriver<T extends WebElement> extends RemoteWebDriver {
     }
 
     public AndroidDriver(Capabilities desiredCapabilities) {
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new io.appium.java_client.android.AndroidDriver<>(desiredCapabilities);

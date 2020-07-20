@@ -189,7 +189,8 @@ test case name could be recorded in the reporter.
   - All-Screen screenshot
   - recording... 
 - Alert
-- Action
+- Action/TouchAction
 - ???
+- expand on android/ios driver functionality (for example, back or keypress)
 ####NOTE
 Only use 'success' in step actual - AND ONLY IF CHECK IS PERFORMED - otherwise state fact

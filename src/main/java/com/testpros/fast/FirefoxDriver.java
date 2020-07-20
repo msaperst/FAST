@@ -22,6 +22,7 @@ public class FirefoxDriver extends RemoteWebDriver {
 
     @Deprecated
     public FirefoxDriver(Capabilities capabilities) {
+        this.capabilities = capabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(capabilities);
@@ -35,6 +36,8 @@ public class FirefoxDriver extends RemoteWebDriver {
 
     @Deprecated
     public FirefoxDriver(GeckoDriverService service, Capabilities desiredCapabilities) {
+        this.service = service;
+        this.capabilities = desiredCapabilities;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service, desiredCapabilities);
@@ -47,6 +50,7 @@ public class FirefoxDriver extends RemoteWebDriver {
     }
 
     public FirefoxDriver(FirefoxOptions options) {
+        this.options = options;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(options);
@@ -59,6 +63,7 @@ public class FirefoxDriver extends RemoteWebDriver {
     }
 
     public FirefoxDriver(GeckoDriverService service) {
+        this.service = service;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service);
@@ -71,6 +76,7 @@ public class FirefoxDriver extends RemoteWebDriver {
     }
 
     public FirefoxDriver(XpiDriverService service) {
+        this.service = service;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service);
@@ -83,6 +89,8 @@ public class FirefoxDriver extends RemoteWebDriver {
     }
 
     public FirefoxDriver(GeckoDriverService service, FirefoxOptions options) {
+        this.service = service;
+        this.options = options;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service, options);
@@ -95,6 +103,8 @@ public class FirefoxDriver extends RemoteWebDriver {
     }
 
     public FirefoxDriver(XpiDriverService service, FirefoxOptions options) {
+        this.service = service;
+        this.options = options;
         Step step = setupStep();
         try {
             seleniumRemoteWebDriver = new org.openqa.selenium.firefox.FirefoxDriver(service, options);
